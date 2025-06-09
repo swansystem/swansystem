@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwanSystem - Automatisation Stratégique pour Entreprises</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Variables CSS pour votre nouvelle palette de couleurs */
+        :root {
+            --color-base-dark: #ffffff; /* Brun très foncé - Pour le fond principal, header, footer, et inputs */
+            --color-secondary-dark: #F4F3F5; /* Gris foncé - Pour les cartes de service, section philosophie, formulaires, blocs info contact */
+            --color-accent-warm: #1D1D1F; /* Accent chaud (Orange/Marron clair) - Boutons, icônes, éléments interactifs */
+            --color-text-light: #1D1D1F; /* Gris clair - Pour le texte principal, titres sur fonds foncés */
+            
+            /* Dérivé pour l'état hover de l'accent */
+            --color-accent-warm-hover: #BF9A6F; /* Une nuance légèrement plus foncée de l'accent chaud */
+        }
+
+        /* Styles de base pour le corps et la typographie */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--color-text-light); /* Couleur de texte par défaut pour les fonds foncés */
+            background-color: var(--color-base-dark); /* Fond principal du site */
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Lora', serif;
+            color: var(--color-text-light); /* Titres en gris clair pour un bon contraste sur les fonds foncés */
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 3.8rem; font-weight: 700; }
+        h2 { font-size: 2.8rem; font-weight: 700; }
+        h3 { font-size: 2.0rem; font-weight: 700; }
+        h4 { font-size: 1.5rem; font-weight: 600; }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--color-text-light); /* Paragraphes en gris clair */
+        }
+
+        /* Conteneur principal pour centrer le contenu */
+        .container {
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        /* --- Header / Navigation --- */
+        .header-nav {
+            background-color: var(--color-base-dark); /* Fond de l'en-tête en brun très foncé */
+            box-shadow: 0 2px 15px rgba(0,0,0,0.3); /* Ombre plus prononcée */
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        /* Styles pour le bloc logo/texte */
+        .header-nav .brand {
+            display: flex; /* Permet d'aligner l'image et le texte */
+            align-items: center; /* Centre verticalement */
+            color: var(--color-text-light); /* Couleur du texte du nom de marque */
+            font-family: 'Lora', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        /* Styles pour le logo */
+        .header-nav .brand img {
+            height: 40px; /* Taille du logo */
+            margin-right: 10px; /* Espacement entre le logo et le texte */
+            object-fit: contain; /* S'assure que le logo est bien contenu */
+        }
+        /* Styles pour le texte du logo */
+        .header-nav .logo-text {
+            color: var(--color-text-light); /* Assure la couleur du texte */
+            text-decoration: none; /* Supprime le soulignement par défaut des liens si l'élément était un lien */
+        }
+
+        .header-nav a { /* Liens de navigation (hors logo) */
+            color: var(--color-text-light); /* Liens de navigation en gris clair */
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .header-nav a:hover {
+            color: #BF9A6F; /* Liens avec couleur d'accent au survol */
+        }
+
+        /* --- Hero Section (Automatisez votre succès) --- */
+        .hero-section {
+            background: linear-gradient(to bottom, #D3EBF5, #FFFFFF);
+            padding: 8rem 0;
+            text-align: center;
+        }
+
+        /* --- Service Cards Section --- */
+        .services-section {
+            padding: 6rem 0;
+            background: linear-gradient(to top, #D3EBF5, #FFFFFF);
+        }
+        .service-card {
+            background-color: var(--color-secondary-dark); /* Fond des cartes de service, distinct du fond principal */
+            border-radius: 0.75rem;
+            padding: 2.5rem;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Ombre plus foncée pour le contraste */
+            /* Pour gérer la superposition des icônes */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Aligne les éléments de la carte à gauche */
+        }
+        .service-card:hover {
+            transform: translateY(-0.5rem);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6); /* Ombre plus prononcée au survol */
+        }
+        
+        /* Styles pour les images d'icône (SVG/WEBP) */
+        .service-card img.icon {
+            width: 3rem; /* Taille de l'image équivalente à 3rem de font-size */
+            height: 3rem;
+            object-fit: contain; /* S'assure que l'image est contenue sans distorsion */
+            margin-bottom: 1.5rem; /* Espacement sous l'icône */
+        }
+
+        /* Styles pour le Lottie Player */
+        .service-card lottie-player {
+            width: 3rem; /* Taille de l'animation Lottie */
+            height: 3rem;
+            margin-bottom: 1.5rem; /* Espacement sous l'animation */
+            /* La visibilité est gérée par JavaScript */
+        }
+
+
+        /* --- Process Section (Notre Processus d'Intégration Simplifié) --- */
+        .process-section {
+            background-color: #F4F3F5;
+            padding: 8rem 0;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        .process-circles {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+        .process-circle {
+            width: 150px;
+            height: 150px;
+            background-color: var(--color-accent-warm);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-text-secondary-dark);
+            font-family: 'Lora', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .process-circle:hover {
+            transform: scale(1.05);
+        }
+
+
+        /* --- About/Philosophy Section --- */
+        .philosophy-section {
+            padding: 6rem 0;
+            background: linear-gradient(to bottom, #D3EBF5, #FFFFFF);
+        }
+        .philosophy-image {
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        /* --- CTA Section --- */
+        .cta-section {
+            background-color: var(--color-secondary-dark);
+            color: var(--color-accent-warm-hover);
+            padding: 6rem 0;
+            text-align: center;
+        }
+        .cta-section h2 {
+            color: var(--color-text-secondary-dark);
+            margin-bottom: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-section p {
+            color: var(--color-base-dark);
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.2rem;
+        }
+
+        /* --- Contact Section --- */
+        .contact-section {
+            padding: 6rem 0;
+            background: linear-gradient(to top, #D3EBF5, #FFFFFF);
+        }
+        .contact-form {
+            background-color: var(--color-secondary-dark);
+            padding: 3rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        .contact-form label {
+            font-weight: 600;
+            color: var(--color-text-light);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-base-dark);
+            border-radius: 0.5rem;
+            background-color: var(--color-base-dark);
+            color: var(--color-text-light);
+            font-size: 1rem;
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--color-accent-warm);
+            box-shadow: 0 0 0 3px rgba(222, 174, 131, 0.4);
+        }
+        .contact-info-block {
+            background-color: var(--color-secondary-dark);
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .contact-info-block a {
+            color: var(--color-accent-warm);
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+        .contact-info-block a:hover {
+            color: var(--color-accent-warm-hover);
+        }
+        /* Styles pour les liens réseaux sociaux avec logos */
+        .contact-info-block .social-links-container {
+            display: flex; /* Make the container a flexbox */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            gap: 3rem; /* Space between each social media item */
+        }
+
+        .contact-info-block .social-item {
+            display: flex; /* Use flexbox for each item */
+            flex-direction: column; /* Stack text and icon vertically */
+            align-items: center; /* Align text and icon to the start (left) */
+            text-decoration: none; /* Remove underline from the whole item */
+            color: var(--color-text-light); /* Default color for text and icon */
+            transition: color 0.3s ease;
+        }
+
+        .contact-info-block .social-item:hover {
+            color: #BF9A6F; /* Color on hover for both text and icon */
+        }
+        
+        .contact-info-block .social-item a { /* Style for the actual clickable text link */
+            color: inherit; /* Inherit color from parent .social-item */
+            text-decoration: none; /* Remove underline from the actual text link */
+            font-size: 1.1rem; /* Adjust text size as needed */
+            margin-bottom: 0.25rem; /* Space between text and icon */
+        }
+
+        .contact-info-block .social-item .social-icon {
+            font-size: 1.5rem; /* Icon size */
+            color: inherit; /* Inherit color from parent .social-item */
+        }
+
+
+        /* --- Footer --- */
+        .footer-section {
+            background-color: #F4F3F5;
+            color: var(--color-text-light);
+            padding: 3rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--color-secondary-dark);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.2rem; }
+            h3 { font-size: 1.6rem; }
+            .hero-section { padding: 6rem 0; }
+            .services-section, .philosophy-section, .cta-section, .contact-section { padding: 5rem 0; }
+            .philosophy-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .philosophy-text, .philosophy-image-wrapper { width: 100%; max-width: 600px; }
+            .philosophy-text { margin-top: 2rem; }
+            .process-circles { gap: 2rem; }
+            .process-circle { width: 120px; height: 120px; font-size: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav .container {
+                flex-direction: column;
+            }
+            .header-nav nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header-nav nav ul li {
+                margin: 0.5rem 1rem;
+            }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.8rem; }
+            h3 { font-size: 1.4rem; }
+            p { font-size: 1rem; }
+            .hero-section { padding: 4rem 0; }
+            .services-section, .philosophy-section, .cta-section, .contact-section { padding: 4rem 0; }
+            .contact-form { padding: 2rem; }
+            .contact-form-grid { grid-template-columns: 1fr; }
+            .contact-info-grid { grid-template-columns: 1fr; }
+            .process-circles { flex-direction: column; gap: 1.5rem; }
+            .process-circle { width: 100px; height: 100px; font-size: 1.8rem; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.2rem; }
+            .btn-primary { padding: 12px 20px; font-size: 1rem; }
+            .container { padding-left: 1rem; padding-right: 1rem; }
+            .process-circle { width: 80px; height: 80px; font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-nav">
+        <div class="container flex justify-between items-center">
+            <div class="brand">
+                <img src="swanlogo.png" alt="SwanSystem Logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/464547/BCBDBF?text=Logo';" />
+                <span class="logo-text">SwanSystem</span>
+            </div>
+            <nav>
+                <ul class="flex space-x-8">
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="accueil" class="hero-section">
+        <div class="container">
+            <h1 class="mb-6">Automatisez votre succès, <br>réinventez l'efficacité.</h1>
+            <p class="mb-10">SwanSystem est votre partenaire stratégique en intégration d'automates, transformant votre service client, boostant vos ventes et optimisant la gestion de vos leads.</p>
+        </div>
+    </section>
+
+    <section id="services" class="services-section">
+        <div class="container text-center">
+            <h2 class="mb-16">Nos Solutions d'Automatisation Stratégique</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="service-card">
+                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4ac/512.webp" alt="Bulle de dialogue" class="icon">
+                    <h3>Service Client Augmenté par l'IA</h3>
+                    <p>Déployez des chatbots intelligents pour une assistance 24/7, des réponses instantanées et une gestion fluide des demandes, libérant le temps de vos équipes pour des tâches à plus forte valeur ajoutée.</p>
+                </div>
+                <div class="service-card" id="service-card-rocket">
+                    <img id="rocket-svg" 
+                         src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/emoji.svg" 
+                         alt="Fusée" 
+                         class="icon">
+                    <lottie-player id="rocket-lottie" 
+                                   src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/lottie.json" 
+                                   background="transparent" 
+                                   speed="1" 
+                                   style="width: 3rem; height: 3rem; display: none;" 
+                                   loop></lottie-player>
+                    <h3>Accélération des Ventes & Qualification de Leads</h3>
+                    <p>Qualifiez vos prospects automatiquement, guidez-les à travers le parcours client et augmentez vos conversions grâce à des interactions personnalisées et une gestion optimisée des opportunités.</p>
+                </div>
+                <div class="service-card">
+                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f5d3_fe0f/512.webp" alt="Calendrier" class="icon">
+                    <h3>Prise de Rendez-vous Automatisée</h3>
+                    <p>Simplifiez radicalement la planification des rendez-vous. Nos systèmes s'intègrent à vos calendriers et plateformes existantes pour une gestion intuitive et sans effort.</p>
+                </div>
+                <div class="service-card">
+                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f517/512.webp" alt="Chaîne" class="icon">
+                    <h3>Intégration Web & Réseaux Sociaux</h3>
+                    <p>Connectez vos automates directement à votre site internet et à vos canaux de communication clés : Instagram, Facebook, WhatsApp, LinkedIn, pour une expérience client unifiée.</p>
+                </div>
+                <div class="service-card">
+                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4ca/512.webp" alt="Diagramme" class="icon">
+                    <h3>Analyse Performante & Optimisation</h3>
+                    <p>Bénéficiez d'insights détaillés sur les performances de vos automates. Nous vous aidons à analyser les données pour une optimisation continue et une efficacité accrue.</p>
+                </div>
+                <div class="service-card">
+                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6e0_fe0f/512.webp" alt="Outils" class="icon">
+                    <h3>Support et Maintenance Dédicacés</h3>
+                    <p>Notre engagement ne s'arrête pas au déploiement. Nous assurons un support technique réactif et une maintenance proactive pour garantir le bon fonctionnement de vos solutions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="process-section">
+        <div class="container">
+            <h2 class="mb-12">Notre Processus d'Intégration Simplifié</h2>
+        </div>
+    </section>
+
+    <section id="avantages" class="philosophy-section">
+        <div class="container flex flex-col md:flex-row items-center gap-16">
+            <div class="md:w-1/2">
+                <img src="chatPresentation.png" alt="Image illustrant le chatbot" class="philosophy-image w-full h-auto object-cover">
+            </div>
+            <div class="md:w-1/2 philosophy-content text-left">
+                <h2 class="mb-8">L'ingénierie de la fluidité : notre philosophie SwanSystem.</h2>
+                <p class="mb-6">Comme un architecte conçoit des espaces qui optimisent le mouvement et la fonction, SwanSystem développe des solutions d'automatisation qui restructurent et fluidifient vos processus d'entreprise. Nous ne nous contentons pas d'intégrer des outils ; nous bâtissons des systèmes intelligents qui s'adaptent à vos besoins spécifiques.</p>
+                <p>Notre approche est méticuleuse : analyse approfondie, conception sur mesure, déploiement transparent et suivi rigoureux. Chaque automate est une pièce maîtresse conçue pour s'harmoniser avec votre écosystème existant et propulser votre croissance de manière durable et efficace.</p>
+                <a href="#contact" class="btn-primary mt-8">Bâtir votre futur avec nous</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="container text-center">
+            <h2 class="mb-4">Contactez-nous.</h2>
+            <p class="mb-12 text-lg max-w-2xl mx-auto">Nous serions ravis de discuter de votre projet et de la manière dont SwanSystem peut vous aider à atteindre vos objectifs.</p>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="contact-form text-left">
+                    <h3 class="mb-6">Envoyez-nous un message</h3>
+                    <form class="space-y-6" action="VOTRE_URL_WEBHOOK_MAKE_ICI" method="POST">
+                        <div>
+                            <label for="contact-name">Nom Complet</label>
+                            <input type="text" id="contact-name" name="name" class="mt-2" required>
+                        </div>
+                        <div>
+                            <label for="contact-email">Email</label>
+                            <input type="email" id="contact-email" name="email" class="mt-2" required>
+                        </div>
+                        <div>
+                            <label for="contact-company">Nom de l'entreprise</label>
+                            <input type="text" id="contact-company" name="company" class="mt-2">
+                        </div>
+                        <div>
+                            <label for="contact-message">Votre Message</label>
+                            <textarea id="contact-message" name="message" rows="5" class="mt-2" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn-primary">Envoyer le message</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="contact-info-grid grid grid-cols-1 gap-8">
+                    <div class="contact-info-block">
+                        <h4>Localisation</h4>
+                        <p>123 Rue de l'Innovation</p>
+                        <p>75001 Paris, France</p>
+                    </div>
+                    <div class="contact-info-block">
+                        <h4>Contact Direct</h4>
+                        <p>Email: <a href="mailto:contact@swansystem.fr" class="text-blue-600 hover:underline">contact@swansystem.fr</a></p>
+                        <p>Téléphone: +33 1 23 45 67 89</p>
+                    </div>
+                    <div class="contact-info-block">
+                        <h4>Réseaux Sociaux</h4>
+                        <p>Suivez-nous pour les dernières actualités et innovations.</p>
+                        <div class="mt-4 social-links-container">
+                            <a href="https://www.instagram.com/swan_system/" class="social-item" aria-label="Suivez-nous sur Instagram">
+                                <span>Instagram</span>
+                                <i class="fab fa-instagram social-icon"></i>
+                            </a>
+                            <a href="https://www.facebook.com/profile.php?id=61576774636655" class="social-item" aria-label="Suivez-nous sur Facebook">
+                                <span>Facebook</span>
+                                <i class="fab fa-facebook social-icon"></i>
+                            </a>
+                            <a href="https://wa.me/YOUR_PHONE_NUMBER" class="social-item" aria-label="Contactez-nous sur WhatsApp">
+                                <span>WhatsApp</span>
+                                <i class="fab fa-whatsapp social-icon"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/company/swan-system/" class="social-item" aria-label="Suivez-nous sur LinkedIn">
+                                <span>LinkedIn</span>
+                                <i class="fab fa-linkedin social-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-section">
+        <div class="container">
+            <p class="mb-4">&copy; 2025 SwanSystem. Tous droits réservés.</p>
+            </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const serviceCardRocket = document.getElementById('service-card-rocket');
+            const rocketSvg = document.getElementById('rocket-svg');
+            const rocketLottie = document.getElementById('rocket-lottie');
+
+            if (serviceCardRocket && rocketSvg && rocketLottie) {
+                rocketSvg.style.display = 'block';
+                rocketLottie.style.display = 'none';
+
+                serviceCardRocket.addEventListener('mouseover', () => {
+                    rocketSvg.style.display = 'none';
+                    rocketLottie.style.display = 'block';
+                    rocketLottie.play();
+                });
+
+                serviceCardRocket.addEventListener('mouseout', () => {
+                    rocketLottie.stop();
+                    rocketLottie.style.display = 'none';
+                    rocketSvg.style.display = 'block';
+                });
+            }
+        });
+    </script>
+
+    </body>
+</html>
