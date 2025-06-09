@@ -315,9 +315,9 @@
               notificationText = notificationBadge.querySelector('.notification-text');
 
         // URL du webhook Make.com pour envoyer les données au mode agent (discussion libre)
-        const MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/4j9ak0usjvjbo7ekocdi5pz8huwf82hq';
+        const MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/unm8vufiukw5a6lgfrauauros58a71y8'; // Calendly webhook (pour le mode agent, si utilisé)
         // URL du webhook Make.com pour le stockage TEMPORAIRE des données du chatbot
-        const TEMP_MAKE_WEBHOOK_URL = 'YOUR_TEMP_MAKE_WEBHOOK_URL_HERE'; // *** REMPLACEZ CECI PAR VOTRE VRAIE URL DE WEBHOOK TEMPORAIRE MAKE.COM ***
+        const TEMP_MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/jscwwknits58zta23b2q3vxf96rsx6ro'; // Webhook pour le statut, comptable, etc.
 
         let isChatOpen = false; // Indique si la fenêtre du chat est ouverte
         let hasInitialBotMessageBeenShown = false; // Permet de savoir si le message initial a été affiché
