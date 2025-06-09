@@ -28,6 +28,12 @@
             line-height: 1.7;
             margin: 0;
             padding: 0;
+            transition: overflow 0.3s ease-in-out; /* Ajout d'une transition pour le défilement */
+        }
+
+        /* Empêche le défilement du corps lorsque le calendrier est actif */
+        body.no-scroll {
+            overflow: hidden;
         }
 
         h1, h2, h3, h4 {
@@ -45,7 +51,10 @@
             font-size: 1.1rem;
             color: var(--color-text-light); /* Paragraphes en gris clair */
         }
-
+        .titrePrincipale{
+            font-size: 40px;
+            font-weight: bolder;
+        }
         /* Conteneur principal pour centrer le contenu */
         .container {
             max-width: 1280px;
@@ -351,6 +360,157 @@
             .container { padding-left: 1rem; padding-right: 1rem; }
             .process-circle { width: 80px; height: 80px; font-size: 1.5rem; }
         }
+
+        /* Styles spécifiques pour le bouton Calendly */
+        .calendly-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem; /* Espacement après le titre */
+            margin-bottom: 4rem; /* Espacement avant les cartes de services */
+        }
+
+        .calendly-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: #001f3f; /* Bleu marine */
+            border: 2px solid #001f3f; /* Contour bleu marine */
+            color: white;
+            padding: 1rem 1rem 1rem 2rem; /* Plus de padding à gauche pour le texte */
+            border-radius: 9999px; /* Forme oblongue */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            /* Ajout de la transition pour l'effet de décollement et l'ombre */
+            transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            /* Ombre initiale */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        /* Effet de décollement au survol */
+        .calendly-button:hover {
+            transform: translateY(-0.5rem); /* Déplacement vers le haut */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6); /* Ombre plus grande */
+        }
+
+        .calendly-button-text {
+            padding-right: 1rem; /* Espace entre le texte et le rond */
+        }
+
+        .calendly-button-circle {
+            background-color: #333; /* Gris */
+            border-radius: 50%;
+            width: 2.5rem; /* Taille du rond */
+            height: 2.5rem; /* Taille du rond */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            position: relative;
+            transform: translateX(0); /* Pour l'alignement initial */
+            margin-right: -0.5rem; /* Pour que le rond s'intègre dans la forme oblongue */
+            margin-left: 0.5rem; /* Espace entre le texte et le rond */
+        }
+
+        .calendly-button-arrow {
+            color: white; /* Flèche blanche */
+            font-size: 1.1rem;
+            transition: transform 0.3s ease-out; /* Animation de la flèche */
+        }
+
+        .calendly-button:hover .calendly-button-arrow {
+            transform: translateX(10px); /* La flèche bouge légèrement à droite au survol */
+        }
+
+        /* Styles pour le pop-up Calendly */
+        .calendly-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Fond semi-transparent derrière le calendrier */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1050; /* Augmenté pour s'assurer qu'il est au-dessus de tout */
+            visibility: hidden; /* Masqué par défaut */
+            opacity: 0; /* Transparent par défaut */
+            transition: opacity 0.3s ease-in-out; /* Transition pour l'opacité */
+        }
+
+        /* Suppression des styles is-hovering puisque la fonctionnalité est retirée */
+        /*
+        .calendly-overlay.is-hovering {
+            visibility: visible;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        */
+
+        .calendly-overlay.is-active {
+            visibility: visible;
+            opacity: 1; /* Opacité complète au clic sur le bouton */
+            pointer-events: auto; /* Réactive les événements de souris */
+        }
+
+        .calendly-popup-content {
+            background-color: white; /* Fond blanc pour le calendrier */
+            border-radius: 0.75rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Ombre pour le calendrier */
+            overflow: hidden; /* Cache le contenu qui dépasse les bords arrondis */
+            width: 90%; /* Largeur responsive */
+            max-width: 800px; /* Largeur maximale sur grands écrans */
+            height: 90%; /* Hauteur responsive */
+            max-height: 650px; /* Hauteur maximale */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendly-popup-content .close-button {
+            position: absolute;
+            top: 10px;
+            left: 10px; /* Positionné en haut à gauche */
+            background-color: #333;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1001; /* Pour être au-dessus du calendrier et de l'iframe */
+            transition: background-color 0.2s ease;
+        }
+
+        .calendly-popup-content .close-button:hover {
+            background-color: #555;
+        }
+
+        /* Style pour l'intégration du widget Calendly à l'intérieur du pop-up */
+        .calendly-inline-widget-container {
+            flex-grow: 1; /* Permet au widget de prendre l'espace disponible */
+            min-height: 0;
+            width: 100%;
+            height: 100%; /* S'assure que le conteneur remplit son parent */
+            background-color: white; /* Couleur de fond pour éviter les zones transparentes avant le chargement de l'iframe */
+        }
+        /* Assure que l'iframe Calendly remplit son conteneur */
+        .calendly-inline-widget { /* C'est la div qui est ciblée par Calendly pour l'injection */
+            width: 100%;
+            height: 100%; /* Définit la hauteur de la div où le widget Calendly est injecté */
+            min-height: 500px; /* Hauteur minimale de secours */
+        }
+        .calendly-inline-widget iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -358,7 +518,7 @@
     <header class="header-nav">
         <div class="container flex justify-between items-center">
             <div class="brand">
-                <img src="swanlogo.png" alt="SwanSystem Logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/464547/BCBDBF?text=Logo';" />
+                <img src="swanlogo.png" alt="Logo SwanSystem" onerror="this.onerror=null;this.src='https://placehold.co/40x40/464547/BCBDBF?text=Logo';" />
                 <span class="logo-text">SwanSystem</span>
             </div>
             <nav>
@@ -371,14 +531,26 @@
 
     <section id="accueil" class="hero-section">
         <div class="container">
-            <h1 class="mb-6">Automatisez votre succès, <br>réinventez l'efficacité.</h1>
-            <p class="mb-10">SwanSystem est votre partenaire stratégique en intégration d'automates, transformant votre service client, boostant vos ventes et optimisant la gestion de vos leads.</p>
+            <h1 class="mb-6 titrePrincipale">Des agents IA pour<br>transformer vos visiteurs</br>en rendez-vous qualifiés, 24h/24</h1>
         </div>
     </section>
 
     <section id="services" class="services-section">
         <div class="container text-center">
-            <h2 class="mb-16">Nos Solutions d'Automatisation Stratégique</h2>
+            <p class="mb-10 text-lg max-w-2xl mx-auto">Nous concevons et intégrons des agents conversationnels intelligents qui accueillent vos visiteurs, répondent à leurs questions, et planifient des rendez-vous à votre place - automatiquement.</p>
+            <h2 class="mb-4">Prêt à faire décoller vos prises de RDV sans augmenter votre budget pub ?</h2>
+            
+            <!-- Bouton Calendly -->
+            <div class="calendly-button-container">
+                <a href="#" class="calendly-button" id="open-calendly">
+                    <span class="calendly-button-text">Réservez votre démonstration gratuite</span>
+                    <div class="calendly-button-circle">
+                        <i class="fas fa-arrow-right calendly-button-arrow"></i>
+                    </div>
+                </a>
+            </div>
+            <!-- Fin du bouton Calendly -->
+
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="service-card">
                     <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4ac/512.webp" alt="Bulle de dialogue" class="icon">
@@ -451,7 +623,7 @@
             <div class="grid lg:grid-cols-2 gap-12">
                 <div class="contact-form text-left">
                     <h3 class="mb-6">Envoyez-nous un message</h3>
-                    <form class="space-y-6" action="VOTRE_URL_WEBHOOK_MAKE_ICI" method="POST">
+                    <form class="space-y-6" action="https://hook.eu2.make.com/0vbkkkmccov653o9i7e6jb6yr4pqfwnb" method="POST">
                         <div>
                             <label for="contact-name">Nom Complet</label>
                             <input type="text" id="contact-name" name="name" class="mt-2" required>
@@ -518,6 +690,18 @@
             </div>
     </footer>
 
+    <!-- Calendly Pop-up Overlay -->
+    <div class="calendly-overlay" id="calendly-overlay">
+        <div class="calendly-popup-content">
+            <span class="close-button" id="calendly-close-button"><i class="fas fa-times"></i></span>
+            <div class="calendly-inline-widget-container">
+                <!-- Replace with your actual Calendly link -->
+                <div class="calendly-inline-widget" data-url="https://calendly.com/benjamin-signol/30min"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin du Calendly Pop-up Overlay -->
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const serviceCardRocket = document.getElementById('service-card-rocket');
@@ -540,8 +724,56 @@
                     rocketSvg.style.display = 'block';
                 });
             }
+
+            // JavaScript pour le pop-up Calendly
+            const openCalendlyButton = document.getElementById('open-calendly');
+            const calendlyOverlay = document.getElementById('calendly-overlay');
+            const closeCalendlyButton = document.getElementById('calendly-close-button');
+            
+            let isCalendlyActive = false; // Pour suivre l'état du calendrier
+
+            // Les écouteurs d'événements mouseenter et mouseleave pour la prévisualisation au survol ont été supprimés.
+            // Le calendrier n'apparaîtra qu'au clic.
+
+            openCalendlyButton.addEventListener('click', (e) => {
+                e.preventDefault(); // Empêche le lien de naviguer
+                isCalendlyActive = true;
+                calendlyOverlay.classList.remove('is-hovering'); // Assure que l'état de survol est retiré
+                calendlyOverlay.classList.add('is-active'); // Affiche le calendrier en pleine opacité
+                document.body.classList.add('no-scroll'); // Empêche le défilement de la page en arrière-plan
+
+                // Charge le script Calendly uniquement si ce n'est pas déjà fait
+                if (!window.Calendly && !document.querySelector('script[src*="calendly.com/assets/external/widget.js"]')) {
+                    const script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+                    script.async = true;
+                    document.body.appendChild(script);
+                }
+            });
+
+            closeCalendlyButton.addEventListener('click', () => {
+                calendlyOverlay.classList.remove('is-active');
+                calendlyOverlay.classList.remove('is-hovering'); // Assure que toutes les classes sont retirées
+                isCalendlyActive = false; // Réinitialise l'état
+                document.body.classList.remove('no-scroll'); // Réactive le défilement de la page
+            });
+
+            // Fermer le calendrier si l'on clique en dehors du contenu du calendrier
+            calendlyOverlay.addEventListener('click', (e) => {
+                if (e.target === calendlyOverlay) {
+                    calendlyOverlay.classList.remove('is-active');
+                    calendlyOverlay.classList.remove('is-hovering');
+                    isCalendlyActive = false;
+                    document.body.classList.remove('no-scroll'); // Réactive le défilement de la page
+                }
+            });
         });
     </script>
 
-    </body>
+    <!-- Intégration du script du chatbot -->
+    <script src="chatbot.js"></script>
+
+    <!-- Le script widget.js de Calendly sera chargé dynamiquement lors du premier clic -->
+</body>
 </html>
