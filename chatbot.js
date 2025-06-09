@@ -315,9 +315,11 @@
               notificationText = notificationBadge.querySelector('.notification-text');
 
         // URL du webhook Make.com pour envoyer les données au mode agent (discussion libre)
-        const MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/unm8vufiukw5a6lgfrauauros58a71y8'; 
+        // C'est le webhook Calendly qui est utilisé pour la communication avec l'agent si l'option est choisie.
+        const MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/cy5j67ym84mr2jfishi6u5y476joy9ba';
         // URL du webhook Make.com pour le stockage TEMPORAIRE des données du chatbot
-        const TEMP_MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/jscwwknits58zta23b2q3vxf96rsx6ro'; 
+        // Ce webhook reçoit les données du chatbot avant la réservation Calendly.
+        const TEMP_MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/jscwwknits58zta23b2q3vxf96rsx6ro';
 
         let isChatOpen = false; // Indique si la fenêtre du chat est ouverte
         let hasInitialBotMessageBeenShown = false; // Permet de savoir si le message initial a été affiché
@@ -445,6 +447,10 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
+                // Cette URL est utilisée pour le mode agent (parler à un agent en ligne),
+                // qui est potentiellement le même webhook que celui de Calendly si l'agent
+                // est censé recevoir des notifications ou des détails de Calendly pour la prise de contact.
+                // Si l'agent doit avoir un webhook complètement séparé, il faudra une troisième URL ici.
                 const response = await fetch(MAKE_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -683,7 +689,7 @@
          * Le bouton flottant est masqué à l'ouverture.
          */
         window.openChatbot = () => {
-            // MODIFIÉ : Le bouton flottant NE sera PLUS caché lors de l'ouverture du chat
+            // Le bouton flottant NE sera PLUS caché lors de l'ouverture du chat
             // chatButton.style.display = 'none';
 
             // Réinitialise la conversation
@@ -755,7 +761,7 @@
                 chatBox.classList.remove('open');
                 setTimeout(() => chatBox.style.display = 'none', 300);
                 isChatOpen = false;
-                // MODIFIÉ : Le bouton reste affiché, donc pas de changement de display ici.
+                // Le bouton reste affiché, donc pas de changement de display ici.
                 // chatButton.style.display = 'flex';
             } else {
                 // Ouverture du chat
@@ -763,7 +769,7 @@
                 setTimeout(() => chatBox.classList.add('open'), 10);
                 isChatOpen = true;
                 toggleNotification(false);
-                // MODIFIÉ : Le bouton reste affiché, donc pas de changement de display ici.
+                // Le bouton reste affiché, donc pas de changement de display ici.
                 // chatButton.style.display = 'none';
 
                 // Si c'est la première ouverture (ou après une réinitialisation), démarre la conversation
@@ -776,10 +782,10 @@
 
         // Gère l'ouverture/fermeture du chat via le bouton flottant (qui est toujours visible)
         chatButton.addEventListener('click', window.toggleChatboxVisibility);
-        // MODIFIÉ : L'écouteur du bouton de fermeture 'X' est retiré
+        // L'écouteur du bouton de fermeture 'X' est retiré
         // closeChatButton.addEventListener('click', window.toggleChatboxVisibility);
 
-        // MODIFIÉ : Le chatbot est fermé par défaut, mais la bulle reste visible.
+        // Le chatbot est fermé par défaut, mais la bulle reste visible.
         // window.openChatbot(); // Cette ligne est maintenant commentée
     });
 })();
