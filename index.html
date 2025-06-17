@@ -9,36 +9,34 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Variables CSS pour votre nouvelle palette de couleurs */
+
         :root {
-            --color-base-dark: #ffffff; /* Brun très foncé - Pour le fond principal, header, footer, et inputs */
-            --color-secondary-dark: #F4F3F5; /* Gris foncé - Pour les cartes de service, section philosophie, formulaires, blocs info contact */
-            --color-accent-warm: #1D1D1F; /* Accent chaud (Orange/Marron clair) - Boutons, icônes, éléments interactifs */
-            --color-text-light: #1D1D1F; /* Gris clair - Pour le texte principal, titres sur fonds foncés */
+            --color-base-dark: #ffffff;
+            --color-secondary-dark: #F4F3F5;
+            --color-accent-warm: #1D1D1F;
+            --color-text-light: #1D1D1F;
             
-            /* Dérivé pour l'état hover de l'accent */
-            --color-accent-warm-hover: #BF9A6F; /* Une nuance légèrement plus foncée de l'accent chaud */
+            --color-accent-warm-hover: #BF9A6F;
         }
 
         /* Styles globaux */
         body {
             font-family: 'Montserrat', sans-serif;
-            color: var(--color-text-light); /* Couleur de texte par défaut pour les fonds foncés */
-            background-color: var(--color-base-dark); /* Fond principal du site */
+            color: var(--color-text-light);
+            background-color: var(--color-base-dark);
             line-height: 1.7;
             margin: 0;
             padding: 0;
-            transition: overflow 0.3s ease-in-out; /* Ajout d'une transition pour le défilement */
+            transition: overflow 0.3s ease-in-out;
         }
 
-        /* Empêche le défilement du corps lorsque le calendrier est actif */
         body.no-scroll {
             overflow: hidden;
         }
 
         h1, h2, h3, h4 {
             font-family: 'Lora', serif;
-            color: var(--color-text-light); /* Titres en gris clair pour un bon contraste sur les fonds foncés */
+            color: var(--color-text-light);
             line-height: 1.2;
         }
 
@@ -49,13 +47,13 @@
 
         p {
             font-size: 1.1rem;
-            color: var(--color-text-light); /* Paragraphes en gris clair */
+            color: var(--color-text-light);
         }
         .titrePrincipale{
             font-size: 40px;
             font-weight: bolder;
         }
-        /* Conteneur principal pour centrer le contenu */
+
         .container {
             max-width: 1280px;
             margin-left: auto;
@@ -64,44 +62,43 @@
             padding-right: 1.5rem;
         }
 
-        /* --- Header / Navigation --- */
         .header-nav {
-            background-color: var(--color-base-dark); /* Fond de l'en-tête en brun très foncé */
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3); /* Ombre plus prononcée */
+            background-color: var(--color-base-dark);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
             padding: 1.5rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
         }
-        /* Styles pour le bloc logo/texte */
+        
         .header-nav .brand {
-            display: flex; /* Permet d'aligner l'image et le texte */
-            align-items: center; /* Centre verticalement */
-            color: var(--color-text-light); /* Couleur du texte du nom de marque */
+            display: flex;
+            align-items: center;
+            color: var(--color-text-light);
             font-family: 'Lora', serif;
             font-size: 2.2rem;
             font-weight: 700;
         }
-        /* Styles pour le logo */
+       
         .header-nav .brand img {
-            height: 40px; /* Taille du logo */
-            margin-right: 10px; /* Espacement entre le logo et le texte */
-            object-fit: contain; /* S'assure que le logo est bien contenu */
+            height: 40px;
+            margin-right: 10px;
+            object-fit: contain;
         }
-        /* Styles pour le texte du logo */
+       
         .header-nav .logo-text {
-            color: var(--color-text-light); /* Assure la couleur du texte */
-            text-decoration: none; /* Supprime le soulignement par défaut des liens si l'élément était un lien */
+            color: var(--color-text-light);
+            text-decoration: none;
         }
 
         .header-nav a { /* Liens de navigation (hors logo) */
-            color: var(--color-text-light); /* Liens de navigation en gris clair */
+            color: var(--color-text-light);
             font-weight: 500;
             text-decoration: none;
             transition: color 0.3s ease;
         }
         .header-nav a:hover {
-            color: #BF9A6F; /* Liens avec couleur d'accent au survol */
+            color: #BF9A6F;
         }
 
         /* --- Hero Section (Automatisez votre succès) --- */
@@ -117,24 +114,23 @@
             background: linear-gradient(to top, #D3EBF5, #FFFFFF);
         }
         .service-card {
-            background-color: var(--color-secondary-dark); /* Fond des cartes de service, distinct du fond principal */
+            background-color: var(--color-secondary-dark);
             border-radius: 0.75rem;
-            /* Le padding sera défini spécifiquement pour les cartes de conversation pour qu'elles aient la même apparence que le premier carré */
+        
             text-align: left;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Ombre plus foncée pour le contraste */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             position: relative;
             display: flex;
             flex-direction: column;
-            height: 350px; /* Hauteur fixe pour toutes les cartes, comme demandé */
-            box-sizing: border-box; /* Inclure padding et border dans la hauteur */
+            height: 350px;
+            box-sizing: border-box;
         }
         .service-card:hover {
             transform: translateY(-0.5rem);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6); /* Ombre plus prononcée au survol */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
         }
         
-        /* Styles pour les images d'icône (SVG/WEBP) - Non utilisés si toutes les cartes sont conversationnelles */
         .service-card img.icon {
             width: 3rem;
             height: 3rem;
@@ -142,51 +138,45 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Styles pour le Lottie Player - Non utilisés si toutes les cartes sont conversationnelles */
         .service-card lottie-player {
             width: 3rem;
             height: 3rem;
             margin-bottom: 1.5rem;
         }
 
-        /* Styles pour les cartes de conversation (qui sont maintenant les .service-card elles-mêmes) */
         .service-card[id^="conversation-card-"] { /* Cible toutes les cartes avec un ID commençant par 'conversation-card-' */
-            color: #fff; /* Couleur du texte par défaut pour les messages */
+            color: #fff;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             line-height: 1.6;
-            padding: 15px; /* Padding spécifique pour les cartes de conversation, comme le premier carré */
-            /* flex-direction: column; est déjà sur .service-card */
-            justify-content: flex-start; /* Aligne le contenu (titre et messages) en haut */
-            overflow: hidden; /* Empêche le défilement général de la carte */
+            padding: 15px;
+            justify-content: flex-start;
+            overflow: hidden;
             position: relative;
-            /* La hauteur est déjà fixée à 350px sur .service-card */
-            box-sizing: border-box; /* S'assurer que le padding est inclus dans la hauteur et la largeur */
+            box-sizing: border-box;
         }
 
-        /* Dégradé Bleu pour toutes les cartes */
         #conversation-card-1 {
-            background: linear-gradient(to bottom right, rgb(69, 110, 128), #D3EBF5); /* Bleu, blanc en bas à droite */
+            background: linear-gradient(to bottom right, rgb(69, 110, 128), #D3EBF5);
         }
         #conversation-card-2 {
-            background: linear-gradient(to bottom, rgb(69, 110, 128), #D3EBF5); /* Bleu, blanc en bas au centre */
+            background: linear-gradient(to bottom, rgb(69, 110, 128), #D3EBF5);
         }
         #conversation-card-3 {
-            background: linear-gradient(to bottom left, rgb(69, 110, 128), #D3EBF5); /* Bleu, blanc en bas à gauche */
+            background: linear-gradient(to bottom left, rgb(69, 110, 128), #D3EBF5);
         }
 
-        /* Styles pour les blocs de texte sur l'image reseau.png */
         .overlay-text-block h2,
         .overlay-text-block h3,
         .overlay-text-block p {
-            color: white; /* Texte blanc pour le contraste sur l'image */
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* Ombre pour améliorer la lisibilité */
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
         }
 
 
         .conversation-card-title {
-            margin-top: 15px; /* Marge pour descendre le titre à l'intérieur du wrapper */
-            margin-bottom: 30px; /* Espace augmenté entre le titre et les messages */
+            margin-top: 15px;
+            margin-bottom: 30px;
             text-align: center;
             color: #333; 
             font-size: 1.4em; 
@@ -195,15 +185,15 @@
         }
 
         .conversation-messages {
-            flex-grow: 1; /* Permet au conteneur de messages de prendre l'espace restant */
+            flex-grow: 1; 
             display: flex;
-            flex-direction: column; /* Les messages s'empilent du haut vers le bas */
-            justify-content: flex-start; /* Aligne le contenu en haut du conteneur des messages */
-            overflow-y: auto; /* Active le défilement vertical pour les messages si nécessaire */
-            min-height: 0; /* Important pour que flex-grow et overflow-y fonctionnent correctement dans un contexte flex */
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+            min-height: 0;
             width: 100%; 
-            padding-top: 0; /* Pas de padding supplémentaire ici */
-            box-sizing: border-box; /* S'assurer que le padding est inclus */
+            padding-top: 0;
+            box-sizing: border-box;
         }
 
         .conversation-message {
@@ -220,16 +210,14 @@
             width: fit-content; 
             min-width: 50px; 
             
-            /* Styles pour les messages de l'agent (par défaut à gauche) */
             background: linear-gradient(45deg, #D3EBF5, #FFFFFF); 
             color: #333; 
             border-bottom-left-radius: 5px;
-            margin-right: auto; /* Pousse le message à gauche */
+            margin-right: auto;
             margin-left: 0; 
         }
 
         .conversation-message.user {
-            /* Styles pour les messages de l'utilisateur (à droite) */
             background: linear-gradient(45deg, #FFFFFF, #D3EBF5); 
             border-bottom-right-radius: 5px;
             margin-left: auto; /* Pousse le message à droite */
@@ -280,9 +268,9 @@
             background: linear-gradient(to top, #D3EBF5, #FFFFFF);
         }
         .contact-form-container {
-            max-width: 600px; /* Limite la largeur du formulaire */
-            margin: 0 auto; /* Centre le formulaire */
-            text-align: left; /* Aligne le texte du formulaire à gauche */
+            max-width: 600px; 
+            margin: 0 auto;
+            text-align: left;
         }
         .contact-form {
             background-color: var(--color-secondary-dark);
@@ -310,8 +298,6 @@
             border-color: var(--color-accent-warm);
             box-shadow: 0 0 0 3px rgba(222, 174, 131, 0.4);
         }
-        /* Styles supprimés pour les contact-info-block, social-links-container, social-item, social-icon car ces sections sont retirées */
-
 
         /* --- Footer --- */
         .footer-section {
@@ -326,13 +312,13 @@
 
         /* Style for footer email link */
         .footer-email-link {
-            color: #333; /* Dark grey */
+            color: #333;
             text-decoration: underline;
             transition: color 0.3s ease;
         }
 
         .footer-email-link:hover {
-            color: #BF9A6F; /* Accent warm hover color */
+            color: #BF9A6F;
         }
 
 
@@ -372,8 +358,6 @@
             .hero-section { padding: 4rem 0; }
             .services-section, .philosophy-section, .cta-section, .contact-section { padding: 4rem 0; }
             .contact-form { padding: 2rem; }
-            /* .contact-form-grid { grid-template-columns: 1fr; } */ /* Commenté car la grille a été simplifiée */
-            /* .contact-info-grid { grid-template-columns: 1fr; } */ /* Commenté car la grille a été simplifiée */
             .process-circles { flex-direction: column; gap: 1.5rem; }
             .process-circle { width: 100px; height: 100px; font-size: 1.8rem; }
         }
@@ -391,63 +375,61 @@
         .calendly-button-container {
             display: flex;
             justify-content: center;
-            margin-top: 3rem; /* Espacement après le titre */
-            margin-bottom: 4rem; /* Espacement avant les cartes de services */
+            margin-top: 3rem;
+            margin-bottom: 4rem;
         }
 
         .calendly-button {
             display: inline-flex;
             align-items: center;
-            background-color: #001f3f; /* Bleu marine */
-            border: 2px solid #001f3f; /* Contour bleu marine */
+            background-color: #001f3f;
+            border: 2px solid #001f3f;
             color: white;
-            padding: 1rem 1rem 1rem 2rem; /* Plus de padding à gauche pour le texte */
-            border-radius: 9999px; /* Forme oblongue */
+            padding: 1rem 1rem 1rem 2rem;
+            border-radius: 9999px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1.1rem;
             position: relative;
             overflow: hidden;
-            /* Ajout de la transition pour l'effet de décollement et l'ombre */
             transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
-            /* Ombre initiale */
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
         /* Effet de décollement au survol */
         .calendly-button:hover {
-            transform: translateY(-0.5rem); /* Déplacement vers le haut */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6); /* Ombre plus grande */
+            transform: translateY(-0.5rem);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
         }
 
         .calendly-button-text {
-            padding-right: 1rem; /* Espace entre le texte et le rond */
+            padding-right: 1rem;
         }
 
         .calendly-button-circle {
-            background-color: #333; /* Gris */
+            background-color: #333;
             border-radius: 50%;
-            width: 2.5rem; /* Taille du rond */
-            height: 2.5rem; /* Taille du rond */
+            width: 2.5rem;
+            height: 2.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-shrink: 0;
             position: relative;
-            transform: translateX(0); /* Pour l'alignement initial */
-            margin-right: -0.5rem; /* Pour que le rond s'intègre dans la forme oblongue */
-            margin-left: 0.5rem; /* Espace entre le texte et le rond */
+            transform: translateX(0);
+            margin-right: -0.5rem;
+            margin-left: 0.5rem;
         }
 
         .calendly-button-arrow {
-            color: white; /* Flèche blanche */
+            color: white;
             font-size: 1.1rem;
-            transition: transform 0.3s ease-out; /* Animation de la flèche */
+            transition: transform 0.3s ease-out;
         }
 
         .calendly-button:hover .calendly-button-arrow {
-            transform: translateX(10px); /* La flèche bouge légèrement à droite au survol */
+            transform: translateX(10px);
         }
 
         /* Styles pour le pop-up Calendly */
@@ -457,29 +439,29 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Fond semi-transparent derrière le calendrier */
+            background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1050; /* Augmenté pour s'assurer qu'il est au-dessus de tout */
-            visibility: hidden; /* Masqué par défaut */
-            opacity: 0; /* Transparent par défaut */
-            transition: opacity 0.3s ease-in-out; /* Transition pour l'opacité */
+            z-index: 1050;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out
         }
 
         .calendly-overlay.is-active {
             visibility: visible;
-            opacity: 1; /* Opacité complète au clic sur le bouton */
-            pointer-events: auto; /* Réactive les événements de souris */
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .calendly-popup-content {
             background-color: white;
             border-radius: 0.75rem;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Ombre pour le calendrier */
-            overflow: hidden; /* Cache le contenu qui dépasse les bords arrondis */
-            width: 90%; /* Largeur responsive */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            width: 90%;
             max-width: 800px;
             height: 90%;
             max-height: 650px;
@@ -490,7 +472,7 @@
         .calendly-popup-content .close-button {
             position: absolute;
             top: 10px;
-            left: 10px; /* Positionné en haut à gauche */
+            left: 10px;
             background-color: #333;
             color: white;
             border-radius: 50%;
@@ -501,7 +483,7 @@
             align-items: center;
             font-size: 1.2rem;
             cursor: pointer;
-            z-index: 1001; /* Pour être au-dessus du calendrier et de l'iframe */
+            z-index: 1001;
             transition: background-color 0.2s ease;
         }
 
@@ -509,9 +491,8 @@
             background-color: #555;
         }
 
-        /* Style pour l'intégration du widget Calendly à l'intérieur du pop-up */
         .calendly-inline-widget-container {
-            flex-grow: 1; /* Permet au widget de prendre l'espace disponible */
+            flex-grow: 1;
             min-height: 0;
             width: 100%;
             height: 100%;
@@ -566,9 +547,7 @@
                     </div>
                 </a>
             </div>
-            <!-- Fin du bouton Calendly -->
 
-            <!-- Nouveau texte à ajouter ici -->
             <p class="mb-10 text-lg max-w-2xl mx-auto">Nos agents sont conçus sur mesure pour épouser la singularité de chaque entreprise. Votre vision, nos compétences : une alliance parfaite pour une automatisation qui vous ressemble, entièrement adaptée à vos processus et objectifs spécifiques.</p>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -576,7 +555,6 @@
                 <div class="service-card" id="conversation-card-1">
                     <h3 class="conversation-card-title">Comptabilité</h3>
                     <div class="conversation-messages">
-                        <!-- Les messages de la conversation seront injectés ici par JavaScript -->
                     </div>
                 </div>
 
@@ -584,7 +562,6 @@
                 <div class="service-card" id="conversation-card-2">
                     <h3 class="conversation-card-title">Assistance juridique</h3>
                     <div class="conversation-messages">
-                        <!-- Les messages de la conversation seront injectés ici par JavaScript -->
                     </div>
                 </div>
                 
@@ -592,7 +569,6 @@
                 <div class="service-card" id="conversation-card-3">
                     <h3 class="conversation-card-title">Architecture & Urbanisme</h3>
                     <div class="conversation-messages">
-                        <!-- Les messages de la conversation seront injectés ici par JavaScript -->
                     </div>
                 </div>
             </div>
@@ -689,7 +665,6 @@
         </div>
     </footer>
 
-    <!-- Calendly Pop-up Overlay (toujours présent si vous le souhaitez pour d'autres usages) -->
     <div class="calendly-overlay" id="calendly-overlay">
         <div class="calendly-popup-content">
             <span class="close-button" id="calendly-close-button"><i class="fas fa-times"></i></span>
@@ -698,19 +673,13 @@
             </div>
         </div>
     </div>
-    <!-- Fin du Calendly Pop-up Overlay -->
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Logique Lottie pour la carte fusée (maintenue si l'ID original était "service-card-rocket")
-            // Note: Comme toutes les cartes sont maintenant des cartes de conversation, cette logique ne s'appliquera plus
-            // à moins que vous ne recréiez une carte dédiée à l'animation Lottie.
-            const serviceCardRocket = document.getElementById('service-card-rocket'); // Cet ID n'existe plus si toutes sont des conversation-card
+            const serviceCardRocket = document.getElementById('service-card-rocket');
             const rocketSvg = document.getElementById('rocket-svg');
             const rocketLottie = document.getElementById('rocket-lottie');
 
-            // Ce bloc est maintenant conditionnel à l'existence de l'élément avec l'ID 'service-card-rocket'
-            // qui n'est plus présent dans la nouvelle structure. Vous pouvez le supprimer si l'animation fusée n'est plus souhaitée.
             if (serviceCardRocket && rocketSvg && rocketLottie) {
                 rocketSvg.style.display = 'block';
                 rocketLottie.style.display = 'none';
@@ -728,14 +697,12 @@
                 });
             }
 
-            // JavaScript pour le pop-up Calendly (maintenu si d'autres éléments l'utilisent)
             const openCalendlyButton = document.getElementById('open-calendly');
             const calendlyOverlay = document.getElementById('calendly-overlay');
             const closeCalendlyButton = document.getElementById('calendly-close-button');
             
             let isCalendlyActive = false; // Pour suivre l'état du calendrier
 
-            // Fonction globale pour ouvrir le Calendly, appelée par le chatbot.js ou d'autres éléments
             window.openCalendlyPopup = (event) => {
                 if (event) event.preventDefault(); 
                 isCalendlyActive = true;
@@ -752,7 +719,7 @@
                 }
             };
 
-            // Écouteur pour le bouton principal de la page (si vous souhaitez qu'il ouvre le pop-up global)
+            // Écouteur pour le bouton principal de la page
             if (openCalendlyButton) {
                 openCalendlyButton.addEventListener('click', window.openCalendlyPopup); 
             }
@@ -814,7 +781,6 @@
                 let isConversationRunning = false;
                 let timeoutId = null;
 
-                // Fonction pour afficher tous les messages instantanément (au chargement de la page) - NE PAS UTILISER ICI POUR LE COMPORTEMENT SOUHAITÉ
                 function displayAllMessagesInstantaneously() {
                     conversationMessagesContainer.innerHTML = ''; // Efface les messages précédents
                     conversationData.forEach(messageInfo => {
@@ -875,9 +841,6 @@
                         currentMessageIndex = 0;
                     }
                 }
-
-                // Pour que les dialogues n'apparaissent qu'au survol/focus, nous n'appelons PAS displayAllMessagesInstantaneously() ici.
-                // Au lieu de cela, le conteneur de messages reste vide jusqu'à l'interaction de l'utilisateur.
                 
                 // Ajoute les écouteurs d'événements pour l'animation au survol/focus
                 cardElement.addEventListener('mouseenter', startCardAnimation);
@@ -891,9 +854,6 @@
             });
         });
     </script>
-
-    <!-- Intégration du script du chatbot -->
-    <script src="chatbot.js"></script>
 
 </body>
 </html>
