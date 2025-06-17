@@ -1,4 +1,4 @@
-(function() { // Utilisation d'une IIFE pour encapsuler le code et éviter les conflits globaux
+/*(function() { // Utilisation d'une IIFE pour encapsuler le code et éviter les conflits globaux
 
     // Injecter les styles CSS dynamiquement
     const style = document.createElement('style');
@@ -849,7 +849,7 @@
         // MODIFIÉ : L'écouteur du bouton de fermeture 'X' est retiré
         // closeChatButton.addEventListener('click', window.toggleChatboxVisibility);
 
-        // MODIFIÉ : Le chatbot est fermé par défaut, mais la bulle reste visible.
+        // MODIFIÉ : Le chatbot est fermé par défaut, mais la bulle reste visible.*/
         // window.openChatbot(); // Cette ligne est maintenant commentée
     });
 })();
