@@ -212,7 +212,7 @@
         /* Styles de la zone de saisie */
         #input-area {
             display: flex; border-top: 1px solid #e0e0e0;
-            padding: 10px; background: linear-gradient(135deg, #D3EBF5, #FFFFFF);
+            padding: 10px; background: linear-gradient(135deg,rgb(69, 110, 128), #D3EBF5);
             border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
         }
         #user-input {
@@ -222,7 +222,7 @@
         }
         #send-button {
             background: linear-gradient(45deg, #D3EBF5, #FFFFFF);
-            color: #fff; border: none; border-radius: 8px;
+            color: #333; border: none; border-radius: 8px;
             padding: 10px 20px; cursor: pointer;
             font-size: 14px; font-weight: bold;
             transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
@@ -315,11 +315,9 @@
               notificationText = notificationBadge.querySelector('.notification-text');
 
         // URL du webhook Make.com pour envoyer les données au mode agent (discussion libre)
-        // C'est le webhook Calendly qui est utilisé pour la communication avec l'agent si l'option est choisie.
-        const MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/cy5j67ym84mr2jfishi6u5y476joy9ba';
+        const MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/4j9ak0usjvjbo7ekocdi5pz8huwf82hq';
         // URL du webhook Make.com pour le stockage TEMPORAIRE des données du chatbot
-        // Ce webhook reçoit les données du chatbot avant la réservation Calendly.
-        const TEMP_MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/jscwwknits58zta23b2q3vxf96rsx6ro';
+        const TEMP_MAKE_WEBHOOK_URL = 'YOUR_TEMP_MAKE_WEBHOOK_URL_HERE'; // *** REMPLACEZ CECI PAR VOTRE VRAIE URL DE WEBHOOK TEMPORAIRE MAKE.COM ***
 
         let isChatOpen = false; // Indique si la fenêtre du chat est ouverte
         let hasInitialBotMessageBeenShown = false; // Permet de savoir si le message initial a été affiché
@@ -328,9 +326,12 @@
         // Objet pour stocker les données de la session du chatbot
         let sessionData = {
             userId: null, // Sera initialisé par getUserId()
-            statutEntreprise: null,
-            aUnComptable: null,
-            formeJuridiqueCreation: null
+            statutEntreprise: null, // Pour le flux "J'ai besoin d'un comptable"
+            aUnComptable: null, // Pour le flux "J'ai besoin d'un comptable"
+            formeJuridiqueCreation: null, // Pour le flux "Je veux créer une société"
+            sujetConseil: null, // Nouvelle donnée pour le sujet du conseil
+            typeSocieteComptabiliteConseil: null, // Pour le conseil en comptabilité
+            aUnComptableConseil: null // Pour le conseil en comptabilité
         };
 
         // Génère un ID utilisateur unique
@@ -446,44 +447,13 @@
             chatMessages.appendChild(loadingMessage);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            try {
-                // Cette URL est utilisée pour le mode agent (parler à un agent en ligne),
-                // qui est potentiellement le même webhook que celui de Calendly si l'agent
-                // est censé recevoir des notifications ou des détails de Calendly pour la prise de contact.
-                // Si l'agent doit avoir un webhook complètement séparé, il faudra une troisième URL ici.
-                const response = await fetch(MAKE_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text, userId: getUserId() })
-                });
+            // Réponse fixe pour le mode agent après le message initial
+            const fixedReply = "Ceci est un Chatbot de démonstration de nos possibilités. Cette partie pourrait aussi bien être reliée à un standard humain qu'artificiel.";
 
+            setTimeout(() => {
                 if (chatMessages.contains(loadingMessage)) chatMessages.removeChild(loadingMessage);
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Erreur HTTP: ${response.status} - ${errorText}`);
-                }
-
-                let data;
-                try { data = await response.json(); }
-                catch (jsonErr) {
-                    const rawResponseText = await response.text();
-                    console.error("Erreur de parsing JSON:", jsonErr, "Réponse brute:", rawResponseText);
-                    appendMessage("Erreur : réponse invalide. (Voir console)", 'bot');
-                    return;
-                }
-
-                if (data && data.reply) {
-                    appendMessage(data.reply, 'bot');
-                } else {
-                    appendMessage("Erreur : réponse inattendue.", 'bot');
-                    console.error("Réponse Make.com inattendue:", data);
-                }
-            } catch (err) {
-                if (chatMessages.contains(loadingMessage)) chatMessages.removeChild(loadingMessage);
-                appendMessage("Erreur lors de la requête. Veuillez réessayer.", 'bot');
-                console.error("Erreur de communication avec Make.com:", err);
-            }
+                appendMessage(fixedReply, 'bot');
+            }, 1500); // Délai pour simuler une réponse
         };
 
         // Écouteurs d'événements pour la saisie de texte
@@ -504,7 +474,7 @@
 
             const calendlyIframe = D.createElement('iframe');
             // Ajout du userId à l'URL de Calendly pour le lier à la réservation
-            calendlyIframe.src = `https://calendly.com/benjamin-signol/30min?a1=${sessionData.userId}`;
+            calendlyIframe.src = `https://calendly.com/swansystem-contact/30min?a1=${sessionData.userId}`;
             calendlyIframe.classList.add('calendly-integrated');
             chatMessages.appendChild(calendlyIframe);
 
@@ -541,7 +511,10 @@
                                     userId: getUserId(),
                                     statutEntreprise: null,
                                     aUnComptable: null,
-                                    formeJuridiqueCreation: null
+                                    formeJuridiqueCreation: null,
+                                    sujetConseil: null,
+                                    typeSocieteComptabiliteConseil: null,
+                                    aUnComptableConseil: null
                                 };
                                 appendMessage("Bonjour, comment puis-je vous aider ?", 'bot');
                                 displayOptions([
@@ -574,7 +547,7 @@
                             case 'creer-societe':
                                 // Réinitialise les données liées si l'utilisateur revient sur ce flux
                                 sessionData.formeJuridiqueCreation = null;
-                                appendMessage("Tu es au bon endroit ! Le savais-tu, la création de société chez Comptastar est gratuite ? Avez-vous déjà choisie une forme juridique ?", 'bot');
+                                appendMessage("Parfait, vous êtes au bon endroit! Avez-vous déjà choisie une forme juridique ?", 'bot');
                                 displayOptions([
                                     { id: 'oui-form-juridique', text: "OUI" },
                                     { id: 'non-form-juridique', text: "NON" }
@@ -582,25 +555,27 @@
                                 conversationState = 'creation_societe_form_juridique';
                                 break;
                             case 'conseil-personnalise':
-                                // Envoie les données temporaires AVANT d'ouvrir Calendly
-                                await sendTemporaryChatbotData();
-                                appendMessage("Pour ceci, je vous invite à prendre rendez-vous avec un de nos conseiller. Voici le calendrier pour la prise de rendez-vous.", 'bot');
-                                integrateCalendly();
+                                // Nouvelle étape pour le conseil personnalisé
+                                sessionData.sujetConseil = null; // Réinitialise le sujet
+                                appendMessage("Très bien, quel sujet concerne votre demande?", 'bot');
+                                displayOptions([
+                                    { id: 'conseil-creation', text: "Création d'entreprise" },
+                                    { id: 'conseil-comptabilite', text: "Comptabilité" },
+                                    { id: 'conseil-autre', text: "Autre" }
+                                ]);
+                                conversationState = 'conseil_personnalise_sujet';
                                 break;
                             case 'parler-agent':
                                 chatOptionsContainer.style.display = 'none';
                                 inputArea.style.display = 'flex';
-                                appendMessage("Clara est en train de se connecter...", 'bot', 'loading');
+                                appendMessage("Clara est en train de se connecter...", 'bot');
 
                                 setTimeout(() => {
-                                    const loadingMsg = chatMessages.querySelector('.message.loading');
-                                    if (loadingMsg) {
-                                        chatMessages.removeChild(loadingMsg);
-                                    }
+                                    // Pas de message de chargement à retirer ici, car c'est un message normal
                                     appendMessage("Bonjour, je suis Clara, votre assistante en ligne, comment puis-je vous aider?", 'bot');
                                     userInput.focus();
                                     conversationState = 'agent_mode';
-                                }, 10000);
+                                }, 1500); // Délai pour simuler une connexion
                                 break;
                             default:
                                 appendMessage("Désolé, je n'ai pas compris votre choix. Veuillez choisir une option.", 'bot');
@@ -619,54 +594,140 @@
                         sessionData.statutEntreprise = option.text;
                         appendMessage("Avez-vous un cabinet comptable actuellement ?", 'bot');
                         displayOptions([
-                            { id: 'changer-cabinet', text: "Oui, je souhaite en changer" },
-                            { id: 'pas-cabinet', text: "Non, je n'en ai pas" }
+                            { id: 'oui-cabinet-exist', text: "Oui" },
+                            { id: 'non-cabinet-exist', text: "Non" }
                         ]);
                         conversationState = 'cabinet_comptable_status';
                         break;
 
                     case 'cabinet_comptable_status':
-                        // Collecte l'information sur le comptable
+                        // Collecte l'information sur le comptable et ajuste le message
                         sessionData.aUnComptable = option.text;
+                        let messageCabinetComptable;
+                        if (option.id === 'oui-cabinet-exist') {
+                            messageCabinetComptable = "Merci pour votre réponse. Je comprends que vous cherchez à changer de cabinet. Je vous propose d’en discuter plus en détail lors d’un rendez-vous si vous souhaitez. Voici nos disponibilités:";
+                        } else { // non-cabinet-exist
+                            messageCabinetComptable = "Très bien, nous pouvons vous accompagner dans vos débuts. Je vous propose d’en discuter plus en détail lors d’un rendez-vous si vous le souhaitez. Voici nos disponibilités:";
+                        }
                         // Envoie les données temporaires AVANT d'ouvrir Calendly
                         await sendTemporaryChatbotData();
-                        appendMessage("Très bien, merci. Je vous invite à prendre rendez-vous. Voici le calendrier pour la prise de rendez-vous.", 'bot');
+                        appendMessage(messageCabinetComptable, 'bot');
                         integrateCalendly();
                         break;
 
                     case 'creation_societe_form_juridique':
                         if (option.id === 'oui-form-juridique') {
-                            appendMessage("Quel type de structure envisagez-vous ?", 'bot');
-                            displayOptions([
-                                { id: 'sas-sasu', text: "SAS/SASU" },
-                                { id: 'sarl-eurl', text: "SARL/EURL" },
-                                { id: 'lmnp', text: "LMNP" },
-                                { id: 'sci', text: "SCI" },
-                                { id: 'auto-entrepreneur', text: "Auto-entrepreneur" },
-                                { id: 'autre-creation', text: "Autre" },
-                                { id: 'je-ne-sais-pas', text: "Je ne sais pas" }
-                            ]);
-                            conversationState = 'creation_societe_structure_choix';
+                            appendMessage("Super, c’est une excellente première étape ! Je vous propose d’en discuter plus en détail lors d’un rendez-vous personnalisé, si vous le souhaitez. Voici nos disponibilités:", 'bot');
+                            // Directly integrate Calendly based on the new flow, as the sub-questions about structure
+                            // are now handled within the 'conseil-creation' path if chosen from 'conseil-personnalise'.
+                            // If chosen from "Je veux créer une société" and "Oui", it goes straight to Calendly
+                            // as per the requirement for the main "Création d'entreprise" path (first modification request).
+                            await sendTemporaryChatbotData();
+                            integrateCalendly();
                         } else if (option.id === 'non-form-juridique') {
-                            sessionData.formeJuridiqueCreation = "Je ne sais pas"; // Enregistrer ce choix implicite
+                            sessionData.formeJuridiqueCreation = "Non (pas encore choisie)"; // Enregistrer ce choix explicite
                             // Envoie les données temporaires AVANT d'ouvrir Calendly
                             await sendTemporaryChatbotData();
-                            appendMessage("D'accord, c'est pas grave, nos conseiller vous aiguilleront. Voici le calendrier pour la prise de rendez-vous.", 'bot');
+                            appendMessage("D’accord, pas de souci. C’est important de faire le bon choix dès le départ. Si vous le souhaitez, nos conseillers sont là pour vous accompagner dans le choix de la forme juridique la plus adaptée à votre projet. Je vous propose d’en discuter lors d’un rendez-vous. Voici nos disponibilités :", 'bot');
                             integrateCalendly();
                         }
                         break;
 
                     case 'creation_societe_structure_choix':
-                        // Collecte la forme juridique envisagée
+                        // This case might be obsolete if "oui-form-juridique" in 'creation_societe_form_juridique'
+                        // directly leads to Calendly now, as per the latest instructions.
+                        // However, it's still used by 'conseil_creation_form_juridique_status' -> 'oui' path.
                         sessionData.formeJuridiqueCreation = option.text;
-                        // Envoie les données temporaires AVANT d'ouvrir Calendly
                         await sendTemporaryChatbotData();
                         appendMessage("Très bien, merci. Je vous invite à prendre rendez-vous. Voici le calendrier pour la prise de rendez-vous.", 'bot');
                         integrateCalendly();
                         break;
 
+                    case 'conseil_personnalise_sujet':
+                        sessionData.sujetConseil = option.text;
+                        if (option.id === 'conseil-creation') {
+                            appendMessage("Avez-vous déjà choisie une forme juridique ?", 'bot');
+                            displayOptions([
+                                { id: 'oui-form-juridique-conseil', text: "Oui" },
+                                { id: 'non-form-juridique-conseil', text: "Non" }
+                            ]);
+                            conversationState = 'conseil_creation_form_juridique_status';
+                        } else if (option.id === 'conseil-comptabilite') {
+                            appendMessage("Pour quel type de société ?", 'bot');
+                            displayOptions([
+                                { id: 'sci-conseil-comp', text: "SCI" },
+                                { id: 'sarl-eurl-conseil-comp', text: "SARL/EURL" },
+                                { id: 'lmnp-conseil-comp', text: "LMNP" },
+                                { id: 'professions-liberales-conseil-comp', text: "Professions libérales" },
+                                { id: 'artisans-commercants-conseil-comp', text: "Artisans et commerçants" },
+                                { id: 'btp-conseil-comp', text: "BTP" },
+                                { id: 'e-commerce-conseil-comp', text: "E-commerce" },
+                                { id: 'auto-entrepreneur-conseil-comp', text: "Auto-entrepreneur" },
+                                { id: 'taxis-vtc-conseil-comp', text: "Taxis et VTC" },
+                                { id: 'autre-conseil-comp', text: "Autre" }
+                            ]);
+                            conversationState = 'conseil_comptabilite_type_societe';
+                        } else { // 'conseil-autre'
+                            await sendTemporaryChatbotData();
+                            appendMessage("Pour ceci, je vous invite à prendre rendez-vous avec un de nos conseillers. Voici le calendrier pour la prise de rendez-vous.", 'bot');
+                            integrateCalendly();
+                        }
+                        break;
+
+                    case 'conseil_creation_form_juridique_status':
+                        if (option.id === 'non-form-juridique-conseil') {
+                            sessionData.formeJuridiqueCreation = "Non (pas encore choisie)";
+                            await sendTemporaryChatbotData();
+                            appendMessage("D’accord, pas de souci. C’est important de faire le bon choix dès le départ. Si vous le souhaitez, nos conseillers sont là pour vous accompagner dans le choix de la forme juridique la plus adaptée à votre projet. Je vous propose d’en discuter lors d’un rendez-vous. Voici nos disponibilités :", 'bot');
+                            integrateCalendly();
+                        } else if (option.id === 'oui-form-juridique-conseil') {
+                            appendMessage("Quel type de structure envisagez-vous ?", 'bot');
+                            displayOptions([
+                                { id: 'sas-sasu-conseil', text: "SAS/SASU" },
+                                { id: 'sarl-eurl-conseil', text: "SARL/EURL" },
+                                { id: 'lmnp-conseil', text: "LMNP" },
+                                { id: 'sci-conseil', text: "SCI" },
+                                { id: 'auto-entrepreneur-conseil', text: "Auto-entrepreneur" },
+                                { id: 'autre-creation-conseil', text: "Autre" },
+                                { id: 'je-ne-sais-pas-conseil', text: "Je ne sais pas" }
+                            ]);
+                            conversationState = 'conseil_creation_structure_choix';
+                        }
+                        break;
+
+                    case 'conseil_creation_structure_choix':
+                        sessionData.formeJuridiqueCreation = option.text;
+                        await sendTemporaryChatbotData();
+                        appendMessage("Super, c’est une excellente première étape ! Je vous propose d’en discuter plus en détail lors d’un rendez-vous personnalisé, si vous le souhaitez. Voici nos disponibilités:", 'bot');
+                        integrateCalendly();
+                        break;
+
+                    case 'conseil_comptabilite_type_societe':
+                        sessionData.typeSocieteComptabiliteConseil = option.text; // Store the type of society for advice
+                        appendMessage("Travaillez-vous déjà avec un cabinet comptable actuellement ?", 'bot');
+                        displayOptions([
+                            { id: 'oui-cabinet-conseil', text: "Oui" },
+                            { id: 'non-cabinet-conseil', text: "Non" }
+                        ]);
+                        conversationState = 'conseil_comptabilite_cabinet_status';
+                        break;
+
+                    case 'conseil_comptabilite_cabinet_status':
+                        sessionData.aUnComptableConseil = option.text; // Store the answer for advice
+                        let messageComptableConseil;
+                        if (option.id === 'oui-cabinet-conseil') {
+                            messageComptableConseil = "Merci pour votre réponse. Je vous propose d’en discuter plus en détail lors d’un rendez-vous si vous souhaitez. Voici nos disponibilités:";
+                        } else { // non-cabinet-conseil
+                            messageComptableConseil = "D'accord, pas de problème, nous pouvons vous accompagner dans vos débuts. Je vous propose d’en discuter plus en détail lors d’un rendez-vous si vous le souhaitez. Voici nos disponibilités:";
+                        }
+                        await sendTemporaryChatbotData();
+                        appendMessage(messageComptableConseil, 'bot');
+                        integrateCalendly();
+                        break;
+
                     case 'agent_mode':
-                        break; // En mode agent, la logique est gérée par sendMessage
+                        // La logique de réponse fixe est maintenant dans sendMessage()
+                        break;
 
                     default:
                         appendMessage("Désolé, une erreur est survenue. Veuillez redémarrer la conversation.", 'bot');
@@ -689,7 +750,7 @@
          * Le bouton flottant est masqué à l'ouverture.
          */
         window.openChatbot = () => {
-            // Le bouton flottant NE sera PLUS caché lors de l'ouverture du chat
+            // MODIFIÉ : Le bouton flottant NE sera PLUS caché lors de l'ouverture du chat
             // chatButton.style.display = 'none';
 
             // Réinitialise la conversation
@@ -746,7 +807,10 @@
                 userId: getUserId(), // Conserve l'ID utilisateur
                 statutEntreprise: null,
                 aUnComptable: null,
-                formeJuridiqueCreation: null
+                formeJuridiqueCreation: null,
+                sujetConseil: null,
+                typeSocieteComptabiliteConseil: null,
+                aUnComptableConseil: null
             };
         };
 
@@ -761,7 +825,7 @@
                 chatBox.classList.remove('open');
                 setTimeout(() => chatBox.style.display = 'none', 300);
                 isChatOpen = false;
-                // Le bouton reste affiché, donc pas de changement de display ici.
+                // MODIFIÉ : Le bouton reste affiché, donc pas de changement de display ici.
                 // chatButton.style.display = 'flex';
             } else {
                 // Ouverture du chat
@@ -769,7 +833,7 @@
                 setTimeout(() => chatBox.classList.add('open'), 10);
                 isChatOpen = true;
                 toggleNotification(false);
-                // Le bouton reste affiché, donc pas de changement de display ici.
+                // MODIFIÉ : Le bouton reste affiché, donc pas de changement de display ici.
                 // chatButton.style.display = 'none';
 
                 // Si c'est la première ouverture (ou après une réinitialisation), démarre la conversation
@@ -782,10 +846,10 @@
 
         // Gère l'ouverture/fermeture du chat via le bouton flottant (qui est toujours visible)
         chatButton.addEventListener('click', window.toggleChatboxVisibility);
-        // L'écouteur du bouton de fermeture 'X' est retiré
+        // MODIFIÉ : L'écouteur du bouton de fermeture 'X' est retiré
         // closeChatButton.addEventListener('click', window.toggleChatboxVisibility);
 
-        // Le chatbot est fermé par défaut, mais la bulle reste visible.
+        // MODIFIÉ : Le chatbot est fermé par défaut, mais la bulle reste visible.
         // window.openChatbot(); // Cette ligne est maintenant commentée
     });
 })();
