@@ -20,7 +20,7 @@
             --color-accent-warm-hover: #BF9A6F; /* Une nuance légèrement plus foncée de l'accent chaud */
         }
 
-        /* Styles de base pour le corps et la typographie */
+        /* Styles globaux */
         body {
             font-family: 'Montserrat', sans-serif;
             color: var(--color-text-light); /* Couleur de texte par défaut pour les fonds foncés */
@@ -119,72 +119,127 @@
         .service-card {
             background-color: var(--color-secondary-dark); /* Fond des cartes de service, distinct du fond principal */
             border-radius: 0.75rem;
-            padding: 2.5rem;
+            /* Le padding sera défini spécifiquement pour les cartes de conversation pour qu'elles aient la même apparence que le premier carré */
             text-align: left;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Ombre plus foncée pour le contraste */
-            /* Pour gérer la superposition des icônes */
             position: relative;
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Aligne les éléments de la carte à gauche */
+            height: 350px; /* Hauteur fixe pour toutes les cartes, comme demandé */
+            box-sizing: border-box; /* Inclure padding et border dans la hauteur */
         }
         .service-card:hover {
             transform: translateY(-0.5rem);
             box-shadow: 0 10px 25px rgba(0,0,0,0.6); /* Ombre plus prononcée au survol */
         }
         
-        /* Styles pour les images d'icône (SVG/WEBP) */
+        /* Styles pour les images d'icône (SVG/WEBP) - Non utilisés si toutes les cartes sont conversationnelles */
         .service-card img.icon {
-            width: 3rem; /* Taille de l'image équivalente à 3rem de font-size */
+            width: 3rem;
             height: 3rem;
-            object-fit: contain; /* S'assure que l'image est contenue sans distorsion */
-            margin-bottom: 1.5rem; /* Espacement sous l'icône */
+            object-fit: contain;
+            margin-bottom: 1.5rem;
         }
 
-        /* Styles pour le Lottie Player */
+        /* Styles pour le Lottie Player - Non utilisés si toutes les cartes sont conversationnelles */
         .service-card lottie-player {
-            width: 3rem; /* Taille de l'animation Lottie */
+            width: 3rem;
             height: 3rem;
-            margin-bottom: 1.5rem; /* Espacement sous l'animation */
-            /* La visibilité est gérée par JavaScript */
+            margin-bottom: 1.5rem;
+        }
+
+        /* Styles pour les cartes de conversation (qui sont maintenant les .service-card elles-mêmes) */
+        .service-card[id^="conversation-card-"] { /* Cible toutes les cartes avec un ID commençant par 'conversation-card-' */
+            color: #fff; /* Couleur du texte par défaut pour les messages */
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 15px; /* Padding spécifique pour les cartes de conversation, comme le premier carré */
+            /* flex-direction: column; est déjà sur .service-card */
+            justify-content: flex-start; /* Aligne le contenu (titre et messages) en haut */
+            overflow: hidden; /* Empêche le défilement général de la carte */
+            position: relative;
+            /* La hauteur est déjà fixée à 350px sur .service-card */
+            box-sizing: border-box; /* S'assurer que le padding est inclus dans la hauteur et la largeur */
+        }
+
+        /* Dégradé Bleu pour toutes les cartes */
+        #conversation-card-1 {
+            background: linear-gradient(to bottom right, rgb(69, 110, 128), #D3EBF5); /* Bleu, blanc en bas à droite */
+        }
+        #conversation-card-2 {
+            background: linear-gradient(to bottom, rgb(69, 110, 128), #D3EBF5); /* Bleu, blanc en bas au centre */
+        }
+        #conversation-card-3 {
+            background: linear-gradient(to bottom left, rgb(69, 110, 128), #D3EBF5); /* Bleu, blanc en bas à gauche */
+        }
+
+        /* Styles pour les blocs de texte sur l'image reseau.png */
+        .overlay-text-block h2,
+        .overlay-text-block h3,
+        .overlay-text-block p {
+            color: white; /* Texte blanc pour le contraste sur l'image */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* Ombre pour améliorer la lisibilité */
         }
 
 
-        /* --- Process Section (Notre Processus d'Intégration Simplifié) --- */
-        .process-section {
-            background-color: #F4F3F5;
-            padding: 8rem 0;
+        .conversation-card-title {
+            margin-top: 15px; /* Marge pour descendre le titre à l'intérieur du wrapper */
+            margin-bottom: 30px; /* Espace augmenté entre le titre et les messages */
             text-align: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-        }
-        .process-circles {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 4rem;
-            flex-wrap: wrap;
-        }
-        .process-circle {
-            width: 150px;
-            height: 150px;
-            background-color: var(--color-accent-warm);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--color-text-secondary-dark);
-            font-family: 'Lora', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-        .process-circle:hover {
-            transform: scale(1.05);
+            color: #333; 
+            font-size: 1.4em; 
+            font-weight: bold;
+            width: 100%; 
         }
 
+        .conversation-messages {
+            flex-grow: 1; /* Permet au conteneur de messages de prendre l'espace restant */
+            display: flex;
+            flex-direction: column; /* Les messages s'empilent du haut vers le bas */
+            justify-content: flex-start; /* Aligne le contenu en haut du conteneur des messages */
+            overflow-y: auto; /* Active le défilement vertical pour les messages si nécessaire */
+            min-height: 0; /* Important pour que flex-grow et overflow-y fonctionnent correctement dans un contexte flex */
+            width: 100%; 
+            padding-top: 0; /* Pas de padding supplémentaire ici */
+            box-sizing: border-box; /* S'assurer que le padding est inclus */
+        }
+
+        .conversation-message {
+            max-width: 90%;
+            padding: 8px 12px;
+            border-radius: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-bottom: 10px;
+            opacity: 0; 
+            transform: translateY(10px); 
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; 
+            box-sizing: border-box; 
+            width: fit-content; 
+            min-width: 50px; 
+            
+            /* Styles pour les messages de l'agent (par défaut à gauche) */
+            background: linear-gradient(45deg, #D3EBF5, #FFFFFF); 
+            color: #333; 
+            border-bottom-left-radius: 5px;
+            margin-right: auto; /* Pousse le message à gauche */
+            margin-left: 0; 
+        }
+
+        .conversation-message.user {
+            /* Styles pour les messages de l'utilisateur (à droite) */
+            background: linear-gradient(45deg, #FFFFFF, #D3EBF5); 
+            border-bottom-right-radius: 5px;
+            margin-left: auto; /* Pousse le message à droite */
+            margin-right: 0; 
+        }
+
+        .conversation-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         /* --- About/Philosophy Section --- */
         .philosophy-section {
@@ -224,6 +279,11 @@
             padding: 6rem 0;
             background: linear-gradient(to top, #D3EBF5, #FFFFFF);
         }
+        .contact-form-container {
+            max-width: 600px; /* Limite la largeur du formulaire */
+            margin: 0 auto; /* Centre le formulaire */
+            text-align: left; /* Aligne le texte du formulaire à gauche */
+        }
         .contact-form {
             background-color: var(--color-secondary-dark);
             padding: 3rem;
@@ -250,52 +310,7 @@
             border-color: var(--color-accent-warm);
             box-shadow: 0 0 0 3px rgba(222, 174, 131, 0.4);
         }
-        .contact-info-block {
-            background-color: var(--color-secondary-dark);
-            padding: 2.5rem;
-            border-radius: 0.75rem;
-            text-align: left;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .contact-info-block a {
-            color: var(--color-accent-warm);
-            text-decoration: underline;
-            transition: color 0.3s ease;
-        }
-        .contact-info-block a:hover {
-            color: var(--color-accent-warm-hover);
-        }
-        /* Styles pour les liens réseaux sociaux avec logos */
-        .contact-info-block .social-links-container {
-            display: flex; /* Make the container a flexbox */
-            flex-wrap: wrap; /* Allow items to wrap to the next line */
-            gap: 3rem; /* Space between each social media item */
-        }
-
-        .contact-info-block .social-item {
-            display: flex; /* Use flexbox for each item */
-            flex-direction: column; /* Stack text and icon vertically */
-            align-items: center; /* Align text and icon to the start (left) */
-            text-decoration: none; /* Remove underline from the whole item */
-            color: var(--color-text-light); /* Default color for text and icon */
-            transition: color 0.3s ease;
-        }
-
-        .contact-info-block .social-item:hover {
-            color: #BF9A6F; /* Color on hover for both text and icon */
-        }
-        
-        .contact-info-block .social-item a { /* Style for the actual clickable text link */
-            color: inherit; /* Inherit color from parent .social-item */
-            text-decoration: none; /* Remove underline from the actual text link */
-            font-size: 1.1rem; /* Adjust text size as needed */
-            margin-bottom: 0.25rem; /* Space between text and icon */
-        }
-
-        .contact-info-block .social-item .social-icon {
-            font-size: 1.5rem; /* Icon size */
-            color: inherit; /* Inherit color from parent .social-item */
-        }
+        /* Styles supprimés pour les contact-info-block, social-links-container, social-item, social-icon car ces sections sont retirées */
 
 
         /* --- Footer --- */
@@ -307,6 +322,17 @@
             font-size: 0.9rem;
             border-top: 1px solid var(--color-secondary-dark);
             box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Style for footer email link */
+        .footer-email-link {
+            color: #333; /* Dark grey */
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .footer-email-link:hover {
+            color: #BF9A6F; /* Accent warm hover color */
         }
 
 
@@ -346,8 +372,8 @@
             .hero-section { padding: 4rem 0; }
             .services-section, .philosophy-section, .cta-section, .contact-section { padding: 4rem 0; }
             .contact-form { padding: 2rem; }
-            .contact-form-grid { grid-template-columns: 1fr; }
-            .contact-info-grid { grid-template-columns: 1fr; }
+            /* .contact-form-grid { grid-template-columns: 1fr; } */ /* Commenté car la grille a été simplifiée */
+            /* .contact-info-grid { grid-template-columns: 1fr; } */ /* Commenté car la grille a été simplifiée */
             .process-circles { flex-direction: column; gap: 1.5rem; }
             .process-circle { width: 100px; height: 100px; font-size: 1.8rem; }
         }
@@ -441,15 +467,6 @@
             transition: opacity 0.3s ease-in-out; /* Transition pour l'opacité */
         }
 
-        /* Suppression des styles is-hovering puisque la fonctionnalité est retirée */
-        /*
-        .calendly-overlay.is-hovering {
-            visibility: visible;
-            opacity: 0.1;
-            pointer-events: none;
-        }
-        */
-
         .calendly-overlay.is-active {
             visibility: visible;
             opacity: 1; /* Opacité complète au clic sur le bouton */
@@ -457,15 +474,15 @@
         }
 
         .calendly-popup-content {
-            background-color: white; /* Fond blanc pour le calendrier */
+            background-color: white;
             border-radius: 0.75rem;
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Ombre pour le calendrier */
             overflow: hidden; /* Cache le contenu qui dépasse les bords arrondis */
             width: 90%; /* Largeur responsive */
-            max-width: 800px; /* Largeur maximale sur grands écrans */
-            height: 90%; /* Hauteur responsive */
-            max-height: 650px; /* Hauteur maximale */
+            max-width: 800px;
+            height: 90%;
+            max-height: 650px;
             display: flex;
             flex-direction: column;
         }
@@ -497,14 +514,14 @@
             flex-grow: 1; /* Permet au widget de prendre l'espace disponible */
             min-height: 0;
             width: 100%;
-            height: 100%; /* S'assure que le conteneur remplit son parent */
-            background-color: white; /* Couleur de fond pour éviter les zones transparentes avant le chargement de l'iframe */
+            height: 100%;
+            background-color: white;
         }
-        /* Assure que l'iframe Calendly remplit son conteneur */
-        .calendly-inline-widget { /* C'est la div qui est ciblée par Calendly pour l'injection */
+        /* Assure que la div où le widget Calendly est injecté remplit son conteneur */
+        .calendly-inline-widget { 
             width: 100%;
-            height: 100%; /* Définit la hauteur de la div où le widget Calendly est injecté */
-            min-height: 500px; /* Hauteur minimale de secours */
+            height: 100%; 
+            min-height: 500px;
         }
         .calendly-inline-widget iframe {
             width: 100%;
@@ -531,7 +548,7 @@
 
     <section id="accueil" class="hero-section">
         <div class="container">
-            <h1 class="mb-6 titrePrincipale">Des agents IA pour<br>transformer vos visiteurs</br>en rendez-vous qualifiés, 24h/24</h1>
+            <h1 class="mb-6 titrePrincipale">Des agents intelligents pour<br>transformer vos visiteurs</br>en rendez-vous qualifiés, 24h/24</h1>
         </div>
     </section>
 
@@ -551,60 +568,76 @@
             </div>
             <!-- Fin du bouton Calendly -->
 
+            <!-- Nouveau texte à ajouter ici -->
+            <p class="mb-10 text-lg max-w-2xl mx-auto">Nos agents sont conçus sur mesure pour épouser la singularité de chaque entreprise. Votre vision, nos compétences : une alliance parfaite pour une automatisation qui vous ressemble, entièrement adaptée à vos processus et objectifs spécifiques.</p>
+
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="service-card">
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4ac/512.webp" alt="Bulle de dialogue" class="icon">
-                    <h3>Service Client Augmenté par l'IA</h3>
-                    <p>Déployez des chatbots intelligents pour une assistance 24/7, des réponses instantanées et une gestion fluide des demandes, libérant le temps de vos équipes pour des tâches à plus forte valeur ajoutée.</p>
+                <!-- SERVICE-CARD 1 -->
+                <div class="service-card" id="conversation-card-1">
+                    <h3 class="conversation-card-title">Comptabilité</h3>
+                    <div class="conversation-messages">
+                        <!-- Les messages de la conversation seront injectés ici par JavaScript -->
+                    </div>
                 </div>
-                <div class="service-card" id="service-card-rocket">
-                    <img id="rocket-svg" 
-                         src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/emoji.svg" 
-                         alt="Fusée" 
-                         class="icon">
-                    <lottie-player id="rocket-lottie" 
-                                   src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/lottie.json" 
-                                   background="transparent" 
-                                   speed="1" 
-                                   style="width: 3rem; height: 3rem; display: none;" 
-                                   loop></lottie-player>
-                    <h3>Accélération des Ventes & Qualification de Leads</h3>
-                    <p>Qualifiez vos prospects automatiquement, guidez-les à travers le parcours client et augmentez vos conversions grâce à des interactions personnalisées et une gestion optimisée des opportunités.</p>
+
+                <!-- SERVICE-CARD 2 -->
+                <div class="service-card" id="conversation-card-2">
+                    <h3 class="conversation-card-title">Assistance juridique</h3>
+                    <div class="conversation-messages">
+                        <!-- Les messages de la conversation seront injectés ici par JavaScript -->
+                    </div>
                 </div>
-                <div class="service-card">
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f5d3_fe0f/512.webp" alt="Calendrier" class="icon">
-                    <h3>Prise de Rendez-vous Automatisée</h3>
-                    <p>Simplifiez radicalement la planification des rendez-vous. Nos systèmes s'intègrent à vos calendriers et plateformes existantes pour une gestion intuitive et sans effort.</p>
-                </div>
-                <div class="service-card">
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f517/512.webp" alt="Chaîne" class="icon">
-                    <h3>Intégration Web & Réseaux Sociaux</h3>
-                    <p>Connectez vos automates directement à votre site internet et à vos canaux de communication clés : Instagram, Facebook, WhatsApp, LinkedIn, pour une expérience client unifiée.</p>
-                </div>
-                <div class="service-card">
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4ca/512.webp" alt="Diagramme" class="icon">
-                    <h3>Analyse Performante & Optimisation</h3>
-                    <p>Bénéficiez d'insights détaillés sur les performances de vos automates. Nous vous aidons à analyser les données pour une optimisation continue et une efficacité accrue.</p>
-                </div>
-                <div class="service-card">
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6e0_fe0f/512.webp" alt="Outils" class="icon">
-                    <h3>Support et Maintenance Dédicacés</h3>
-                    <p>Notre engagement ne s'arrête pas au déploiement. Nous assurons un support technique réactif et une maintenance proactive pour garantir le bon fonctionnement de vos solutions.</p>
+                
+                <!-- SERVICE-CARD 3 -->
+                <div class="service-card" id="conversation-card-3">
+                    <h3 class="conversation-card-title">Architecture & Urbanisme</h3>
+                    <div class="conversation-messages">
+                        <!-- Les messages de la conversation seront injectés ici par JavaScript -->
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="process-section">
+    <!-- Image reseau.png with text overlays -->
+    <div class="relative w-full h-auto overflow-hidden">
+        <img src="reseau.png" alt="Réseau d'automatisation" class="w-full h-auto object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1920x600/ADADAF/2B2B2B?text=Image+reseau.png+non+trouvée';">
+        
+        <!-- Overlay container for absolute positioning -->
+        <div class="absolute inset-0 text-white">
+            <!-- Top Title -->
+            <div class="absolute top-[5%] left-1/2 -translate-x-1/2 w-full max-w-4xl px-4">
+                <h2 class="text-xl md:text-3xl lg:text-4xl font-bold text-center">Les différents types de chatbots</h2>
+            </div>
+
+            <!-- Left Chatbot Section -->
+            <div class="absolute top-1/4 left-[5%] w-[40%] md:w-1/4 p-4">
+                <h3 class="text-base md:text-lg lg:text-xl font-bold mb-2 text-center">Chatbot à questions prédéfinies</h3>
+                <p class="text-sm md:text-base lg:text-lg text-justify">Ce type de chatbot suit un scénario précis, avec des questions et des réponses prédéfinies. Il est idéal pour guider l’utilisateur pas à pas, répondre à des demandes simples ou automatiser des parcours répétitifs. Facile à personnaliser, il garantit un contrôle total sur le déroulé des échanges.</p>
+            </div>
+
+            <!-- Right Chatbot Section -->
+            <div class="absolute top-1/4 right-[5%] w-[40%] md:w-1/4 p-4">
+                <h3 class="text-base md:text-lg lg:text-xl font-bold mb-2 text-center">Chatbot avec IA</h3>
+                <p class="text-sm md:text-base lg:text-lg text-justify">Basé sur une IA entraînée, ce chatbot comprend le langage naturel et répond de manière autonome, sans avoir besoin de scripts préétablis. Il s’adapte aux demandes complexes, improvise en fonction du contexte et offre une interaction plus fluide et naturelle.</p>
+            </div>
+        </div>
+    </div>
+    <!-- END Image reseau.png with text overlays -->
+
+    <!-- New section for the bottom paragraph -->
+    <section class="bg-[#D3EBF5] py-2 text-center text-[#1D1D1F]" style="min-height: 100px;">
         <div class="container">
-            <h2 class="mb-12">Notre Processus d'Intégration Simplifié</h2>
+            <h3 class="text-base md:text-lg lg:text-xl font-bold mb-2">Combiner les deux pour plus d’efficacité</h3>
+            <p class="text-sm md:text-base lg:text-lg max-w-4xl mx-auto">Il est possible de combiner un chatbot à questions prédéfinies avec un module d’intelligence artificielle. Cette approche hybride permet de bénéficier à la fois de la précision d’un scénario maîtrisé et de la flexibilité de l’IA, pour une expérience utilisateur à la fois efficace et intelligente.</p>
         </div>
     </section>
+    <!-- END New section for the bottom paragraph -->
 
     <section id="avantages" class="philosophy-section">
         <div class="container flex flex-col md:flex-row items-center gap-16">
             <div class="md:w-1/2">
-                <img src="chatPresentation.png" alt="Image illustrant le chatbot" class="philosophy-image w-full h-auto object-cover">
+                <img src="chatPresentation.png" alt="Image illustrant le chatbot" onerror="this.onerror=null;this.src='https://placehold.co/600x400/ADADAF/2B2B2B?text=Image';" class="philosophy-image w-full h-auto object-cover">
             </div>
             <div class="md:w-1/2 philosophy-content text-left">
                 <h2 class="mb-8">L'ingénierie de la fluidité : notre philosophie SwanSystem.</h2>
@@ -620,10 +653,10 @@
             <h2 class="mb-4">Contactez-nous.</h2>
             <p class="mb-12 text-lg max-w-2xl mx-auto">Nous serions ravis de discuter de votre projet et de la manière dont SwanSystem peut vous aider à atteindre vos objectifs.</p>
 
-            <div class="grid lg:grid-cols-2 gap-12">
+            <div class="contact-form-container">
                 <div class="contact-form text-left">
                     <h3 class="mb-6">Envoyez-nous un message</h3>
-                    <form class="space-y-6" action="https://hook.eu2.make.com/jscwwknits58zta23b2q3vxf96rsx6ro" method="POST">
+                    <form class="space-y-6" action="https://hook.eu2.make.com/0vbkkkmccov653o9i7e6jb6yr4pqfwnb" method="POST">
                         <div>
                             <label for="contact-name">Nom Complet</label>
                             <input type="text" id="contact-name" name="name" class="mt-2" required>
@@ -645,41 +678,6 @@
                         </div>
                     </form>
                 </div>
-
-                <div class="contact-info-grid grid grid-cols-1 gap-8">
-                    <div class="contact-info-block">
-                        <h4>Localisation</h4>
-                        <p>123 Rue de l'Innovation</p>
-                        <p>75001 Paris, France</p>
-                    </div>
-                    <div class="contact-info-block">
-                        <h4>Contact Direct</h4>
-                        <p>Email: <a href="mailto:contact@swansystem.fr" class="text-blue-600 hover:underline">contact@swansystem.fr</a></p>
-                        <p>Téléphone: +33 1 23 45 67 89</p>
-                    </div>
-                    <div class="contact-info-block">
-                        <h4>Réseaux Sociaux</h4>
-                        <p>Suivez-nous pour les dernières actualités et innovations.</p>
-                        <div class="mt-4 social-links-container">
-                            <a href="https://www.instagram.com/swan_system/" class="social-item" aria-label="Suivez-nous sur Instagram">
-                                <span>Instagram</span>
-                                <i class="fab fa-instagram social-icon"></i>
-                            </a>
-                            <a href="https://www.facebook.com/profile.php?id=61576774636655" class="social-item" aria-label="Suivez-nous sur Facebook">
-                                <span>Facebook</span>
-                                <i class="fab fa-facebook social-icon"></i>
-                            </a>
-                            <a href="https://wa.me/YOUR_PHONE_NUMBER" class="social-item" aria-label="Contactez-nous sur WhatsApp">
-                                <span>WhatsApp</span>
-                                <i class="fab fa-whatsapp social-icon"></i>
-                            </a>
-                            <a href="https://www.linkedin.com/company/swan-system/" class="social-item" aria-label="Suivez-nous sur LinkedIn">
-                                <span>LinkedIn</span>
-                                <i class="fab fa-linkedin social-icon"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -687,16 +685,16 @@
     <footer class="footer-section">
         <div class="container">
             <p class="mb-4">&copy; 2025 SwanSystem. Tous droits réservés.</p>
-            </div>
+            <p>Email: <a href="mailto:contact.swansystem@gmail.com" class="footer-email-link">contact.swansystem@gmail.com</a></p>
+        </div>
     </footer>
 
-    <!-- Calendly Pop-up Overlay -->
+    <!-- Calendly Pop-up Overlay (toujours présent si vous le souhaitez pour d'autres usages) -->
     <div class="calendly-overlay" id="calendly-overlay">
         <div class="calendly-popup-content">
             <span class="close-button" id="calendly-close-button"><i class="fas fa-times"></i></span>
             <div class="calendly-inline-widget-container">
-                <!-- Replace with your actual Calendly link -->
-                <div class="calendly-inline-widget" data-url="https://calendly.com/benjamin-signol/30min"></div>
+                <div class="calendly-inline-widget" data-url="https://calendly.com/swansystem-contact/30min"></div>
             </div>
         </div>
     </div>
@@ -704,10 +702,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const serviceCardRocket = document.getElementById('service-card-rocket');
+            // Logique Lottie pour la carte fusée (maintenue si l'ID original était "service-card-rocket")
+            // Note: Comme toutes les cartes sont maintenant des cartes de conversation, cette logique ne s'appliquera plus
+            // à moins que vous ne recréiez une carte dédiée à l'animation Lottie.
+            const serviceCardRocket = document.getElementById('service-card-rocket'); // Cet ID n'existe plus si toutes sont des conversation-card
             const rocketSvg = document.getElementById('rocket-svg');
             const rocketLottie = document.getElementById('rocket-lottie');
 
+            // Ce bloc est maintenant conditionnel à l'existence de l'élément avec l'ID 'service-card-rocket'
+            // qui n'est plus présent dans la nouvelle structure. Vous pouvez le supprimer si l'animation fusée n'est plus souhaitée.
             if (serviceCardRocket && rocketSvg && rocketLottie) {
                 rocketSvg.style.display = 'block';
                 rocketLottie.style.display = 'none';
@@ -725,24 +728,21 @@
                 });
             }
 
-            // JavaScript pour le pop-up Calendly
+            // JavaScript pour le pop-up Calendly (maintenu si d'autres éléments l'utilisent)
             const openCalendlyButton = document.getElementById('open-calendly');
             const calendlyOverlay = document.getElementById('calendly-overlay');
             const closeCalendlyButton = document.getElementById('calendly-close-button');
             
             let isCalendlyActive = false; // Pour suivre l'état du calendrier
 
-            // Les écouteurs d'événements mouseenter et mouseleave pour la prévisualisation au survol ont été supprimés.
-            // Le calendrier n'apparaîtra qu'au clic.
-
-            openCalendlyButton.addEventListener('click', (e) => {
-                e.preventDefault(); // Empêche le lien de naviguer
+            // Fonction globale pour ouvrir le Calendly, appelée par le chatbot.js ou d'autres éléments
+            window.openCalendlyPopup = (event) => {
+                if (event) event.preventDefault(); 
                 isCalendlyActive = true;
-                calendlyOverlay.classList.remove('is-hovering'); // Assure que l'état de survol est retiré
-                calendlyOverlay.classList.add('is-active'); // Affiche le calendrier en pleine opacité
-                document.body.classList.add('no-scroll'); // Empêche le défilement de la page en arrière-plan
+                calendlyOverlay.classList.remove('is-hovering'); 
+                calendlyOverlay.classList.add('is-active'); 
+                document.body.classList.add('no-scroll'); 
 
-                // Charge le script Calendly uniquement si ce n'est pas déjà fait
                 if (!window.Calendly && !document.querySelector('script[src*="calendly.com/assets/external/widget.js"]')) {
                     const script = document.createElement('script');
                     script.type = 'text/javascript';
@@ -750,23 +750,144 @@
                     script.async = true;
                     document.body.appendChild(script);
                 }
-            });
+            };
 
-            closeCalendlyButton.addEventListener('click', () => {
-                calendlyOverlay.classList.remove('is-active');
-                calendlyOverlay.classList.remove('is-hovering'); // Assure que toutes les classes sont retirées
-                isCalendlyActive = false; // Réinitialise l'état
-                document.body.classList.remove('no-scroll'); // Réactive le défilement de la page
-            });
+            // Écouteur pour le bouton principal de la page (si vous souhaitez qu'il ouvre le pop-up global)
+            if (openCalendlyButton) {
+                openCalendlyButton.addEventListener('click', window.openCalendlyPopup); 
+            }
 
-            // Fermer le calendrier si l'on clique en dehors du contenu du calendrier
-            calendlyOverlay.addEventListener('click', (e) => {
-                if (e.target === calendlyOverlay) {
+            if (closeCalendlyButton) {
+                closeCalendlyButton.addEventListener('click', () => {
                     calendlyOverlay.classList.remove('is-active');
-                    calendlyOverlay.classList.remove('is-hovering');
                     isCalendlyActive = false;
-                    document.body.classList.remove('no-scroll'); // Réactive le défilement de la page
+                    document.body.classList.remove('no-scroll');
+                });
+            }
+
+            if (calendlyOverlay) {
+                calendlyOverlay.addEventListener('click', (e) => {
+                    if (e.target === calendlyOverlay) {
+                        calendlyOverlay.classList.remove('is-active');
+                        isCalendlyActive = false;
+                        document.body.classList.remove('no-scroll');
+                    }
+                });
+            }
+
+            // Données de conversation centralisées pour chaque carte
+            const allConversationsData = {
+                "conversation-card-1": [
+                    {"speaker": "Agent", "text": "Bonjour, comment puis-je vous aider ?"},
+                    {"speaker": "Client", "text": "J'ai besoin d'un comptable"},
+                    {"speaker": "Agent", "text": "Très bien, quel est le statut de votre entreprise ?"},
+                    {"speaker": "Client", "text": "SCI"}
+                ],
+                "conversation-card-2": [
+                    {"speaker": "Agent", "text": "Bonjour, comment puis-je vous aider ?"},
+                    {"speaker": "Client", "text": "J'ai besoin d'un conseil juridique"},
+                    {"speaker": "Agent", "text": "Quel est le domaine concerné par votre demande ?"},
+                    {"speaker": "Client", "text": "Droit immobilier"}
+                ],
+                "conversation-card-3": [
+                    {"speaker": "Agent", "text": "Bonjour et bienvenue chez Archi 👋\nPouvez-vous me dire ce que vous cherchez ?"},
+                    {"speaker": "Client", "text": "Obtenir un permis ou des plans"},
+                    {"speaker": "Agent", "text": "Quel type de document cherchez-vous à obtenir ?"},
+                    {"speaker": "Client", "text": "Plans pour dépôt de dossier"}
+                ]
+            };
+
+            // Cible les cartes de service par leur ID commençant par "conversation-card-"
+            const allConversationCards = document.querySelectorAll('.service-card[id^="conversation-card-"]');
+
+            // Fonction pour initialiser la conversation pour une carte donnée
+            function initCardConversation(cardElement) {
+                const conversationMessagesContainer = cardElement.querySelector('.conversation-messages');
+                const conversationData = allConversationsData[cardElement.id]; // Récupère les données par ID
+                
+                if (!conversationData) {
+                    console.error(`No conversation data found for card ID: ${cardElement.id}`);
+                    return; // Sortir si aucune donnée n'est trouvée
                 }
+
+                let currentMessageIndex = 0;
+                let isConversationRunning = false;
+                let timeoutId = null;
+
+                // Fonction pour afficher tous les messages instantanément (au chargement de la page) - NE PAS UTILISER ICI POUR LE COMPORTEMENT SOUHAITÉ
+                function displayAllMessagesInstantaneously() {
+                    conversationMessagesContainer.innerHTML = ''; // Efface les messages précédents
+                    conversationData.forEach(messageInfo => {
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('conversation-message');
+                        if (messageInfo.speaker === 'Client') {
+                            messageElement.classList.add('user');
+                        }
+                        messageElement.innerHTML = `<strong>${messageInfo.speaker}:</strong> ${messageInfo.text}`;
+                        conversationMessagesContainer.appendChild(messageElement);
+                        messageElement.classList.add('visible'); // Rend le message visible instantanément
+                    });
+                    conversationMessagesContainer.scrollTop = conversationMessagesContainer.scrollHeight; // Défile vers le bas
+                }
+
+
+                function displayNextAnimatedMessage() {
+                    if (currentMessageIndex < conversationData.length) {
+                        const messageInfo = conversationData[currentMessageIndex];
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('conversation-message');
+                        if (messageInfo.speaker === 'Client') {
+                            messageElement.classList.add('user');
+                        }
+                        messageElement.innerHTML = `<strong>${messageInfo.speaker}:</strong> ${messageInfo.text}`;
+                        
+                        conversationMessagesContainer.appendChild(messageElement);
+
+                        messageElement.offsetHeight; // Force reflow for CSS transition
+                        messageElement.classList.add('visible');
+
+                        // Scroll to the bottom of the messages container
+                        conversationMessagesContainer.scrollTop = conversationMessagesContainer.scrollHeight;
+
+                        currentMessageIndex++;
+                        if (currentMessageIndex < conversationData.length) {
+                            timeoutId = setTimeout(displayNextAnimatedMessage, 300); // 1 seconde de délai
+                        } else {
+                            isConversationRunning = false; // La conversation est terminée
+                        }
+                    }
+                }
+
+                function startCardAnimation() { // Déclenche l'animation de la conversation
+                    if (!isConversationRunning) {
+                        conversationMessagesContainer.innerHTML = ''; // Réinitialise la conversation
+                        currentMessageIndex = 0;
+                        isConversationRunning = true;
+                        displayNextAnimatedMessage();
+                    }
+                }
+
+                function stopCardAnimation() { // Arrête l'animation et efface les messages
+                    if (isConversationRunning || conversationMessagesContainer.children.length > 0) {
+                        clearTimeout(timeoutId);
+                        isConversationRunning = false;
+                        conversationMessagesContainer.innerHTML = '';
+                        currentMessageIndex = 0;
+                    }
+                }
+
+                // Pour que les dialogues n'apparaissent qu'au survol/focus, nous n'appelons PAS displayAllMessagesInstantaneously() ici.
+                // Au lieu de cela, le conteneur de messages reste vide jusqu'à l'interaction de l'utilisateur.
+                
+                // Ajoute les écouteurs d'événements pour l'animation au survol/focus
+                cardElement.addEventListener('mouseenter', startCardAnimation);
+                cardElement.addEventListener('focusin', startCardAnimation, true); 
+                cardElement.addEventListener('mouseleave', stopCardAnimation);
+            }
+
+            // Applique la logique de conversation à toutes les cartes de service identifiées
+            allConversationCards.forEach(card => {
+                initCardConversation(card);
             });
         });
     </script>
@@ -774,6 +895,5 @@
     <!-- Intégration du script du chatbot -->
     <script src="chatbot.js"></script>
 
-    <!-- Le script widget.js de Calendly sera chargé dynamiquement lors du premier clic -->
 </body>
 </html>
